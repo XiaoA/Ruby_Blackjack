@@ -22,7 +22,7 @@
 # - insurance bets
 # - splitting
 
-# Prodecural Blackboard Game, written in Ruby
+# Procedural Blackboard Game, written in Ruby
 Require 'pry'
 
 

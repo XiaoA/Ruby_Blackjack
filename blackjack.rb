@@ -9,8 +9,9 @@
 # - A way to force the dealer to deal at least to 17
 # - A way to set 21 as the winning hand, and a way to handle 'busts'
 # - A loop that allows the player to continue to play until he/she wants to quit
-# - A way to keep track of bets and money
+# - A way to keep track of bets, and money.
 # - A way to 'shuffle' the deck
+# - A way to deal cards to the dealer, so that the top card is visible, but the bottom card is hidden. (I'll then need to check the dealer's total. If less than 17 the deal has to hit; if 21, deal hit Blackjack; if > 21, dealer busts.)
 
 # Implementation
 # Array vs. Hash for the cards
@@ -35,4 +36,34 @@ deck_three = { 'one_of_hearts' => 1, 'two_of_hearts' =>  2, 'three_of_hearts' =>
 deck_four = { 'one_of_hearts' => 1, 'two_of_hearts' =>  2, 'three_of_hearts' => 3, 'four_of_hearts' =>  4, 'five_of_hearts' =>  5, 'six_of_hearts' =>  6, 'seven_of_hearts' =>  7, 'eight_of_hearts' =>  8, 'nine_of_hearts' =>  9, 'ten_of_hearts' =>  10, 'jack_of_hearts' =>  10, 'queen_of_hearts' => 10, 'king_of_hearts' => 10, 'ace_of_hearts' => 11, 'one_of_clubs' => 1, 'two_of_clubs' =>  2, 'three_of_clubs' => 3, 'four_of_clubs' =>  4, 'five_of_clubs' =>  5, 'six_of_clubs' =>  6, 'seven_of_clubs' =>  7, 'eight_of_clubs' =>  8, 'nine_of_clubs' =>  9, 'ten_of_clubs' =>  10, 'jack_of_clubs' =>  10, 'queen_of_clubs' => 10, 'king_of_clubs' => 10, 'ace_of_clubs' => 11, 'one_of_spades' => 1, 'two_of_spades' =>  2, 'three_of_spades' => 3, 'four_of_spades' =>  4, 'five_of_spades' =>  5, 'six_of_spades' =>  6, 'seven_of_spades' =>  7, 'eight_of_spades' =>  8, 'nine_of_spades' =>  9, 'ten_of_spades' =>  10, 'jack_of_spades' =>  10, 'queen_of_spades' => 10, 'king_of_spades' => 10, 'ace_of_spades' => 11, 'one_of_diamonds' => 1, 'two_of_diamonds' =>  2, 'three_of_diamonds' => 3, 'four_of_diamonds' =>  4, 'five_of_diamonds' =>  5, 'six_of_diamonds' =>  6, 'seven_of_diamonds' =>  7, 'eight_of_diamonds' =>  8, 'nine_of_diamonds' =>  9, 'ten_of_diamonds' =>  10, 'jack_of_diamonds' =>  10, 'queen_of_diamonds' => 10, 'king_of_diamonds' => 10, 'ace_of_diamonds' => 11 }
 
 shoe = [deck_one, deck_two, deck_three, deck_four]
+
+def deal_player_card(shoe)
+  player_new_card = shoe.flatten.sample.keys.sample
+  puts "You been dealt a #{player_new_card}. Hit or Stand?"
+end
+
+def dealer_top_card(shoe)
+  dealer_top_card = shoe.flatten.sample.keys.sample
+  puts "Dealer has a "#{dealer_top_card}."
+end
+
+def dealer_bottom_card(shoe)
+  dealer_bottom_card = shoe.flatten.sample.keys.sample
+end
+
+def hit(shoe)
+  deal_player_card(shoe)
+end
+
+# def check_for_winner
+
+puts dealer_top_card(shoe)
+puts dealer_bottom_card(shoe)
+puts deal_player_card(shoe)
+
+
+
+
+
+
 

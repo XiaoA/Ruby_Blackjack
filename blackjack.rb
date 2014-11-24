@@ -35,35 +35,32 @@ deck_three = { 'two_of_hearts' =>  2, 'three_of_hearts' => 3, 'four_of_hearts' =
 
 deck_four = { 'two_of_hearts' =>  2, 'three_of_hearts' => 3, 'four_of_hearts' =>  4, 'five_of_hearts' =>  5, 'six_of_hearts' =>  6, 'seven_of_hearts' =>  7, 'eight_of_hearts' =>  8, 'nine_of_hearts' =>  9, 'ten_of_hearts' =>  10, 'jack_of_hearts' =>  10, 'queen_of_hearts' => 10, 'king_of_hearts' => 10, 'ace_of_hearts' => 11, 'two_of_clubs' =>  2, 'three_of_clubs' => 3, 'four_of_clubs' =>  4, 'five_of_clubs' =>  5, 'six_of_clubs' =>  6, 'seven_of_clubs' =>  7, 'eight_of_clubs' =>  8, 'nine_of_clubs' =>  9, 'ten_of_clubs' =>  10, 'jack_of_clubs' =>  10, 'queen_of_clubs' => 10, 'king_of_clubs' => 10, 'ace_of_clubs' => 11, 'two_of_spades' =>  2, 'three_of_spades' => 3, 'four_of_spades' =>  4, 'five_of_spades' =>  5, 'six_of_spades' =>  6, 'seven_of_spades' =>  7, 'eight_of_spades' =>  8, 'nine_of_spades' =>  9, 'ten_of_spades' =>  10, 'jack_of_spades' =>  10, 'queen_of_spades' => 10, 'king_of_spades' => 10, 'ace_of_spades' => 11, 'two_of_diamonds' =>  2, 'three_of_diamonds' => 3, 'four_of_diamonds' =>  4, 'five_of_diamonds' =>  5, 'six_of_diamonds' =>  6, 'seven_of_diamonds' =>  7, 'eight_of_diamonds' =>  8, 'nine_of_diamonds' =>  9, 'ten_of_diamonds' =>  10, 'jack_of_diamonds' =>  10, 'queen_of_diamonds' => 10, 'king_of_diamonds' => 10, 'ace_of_diamonds' => 11 }
 
-shoe = [deck_one, deck_two, deck_three, deck_four]
+shoe = [deck_one.to_a.shuffle!, deck_two.to_a.shuffle!, deck_three.to_a.shuffle!, deck_four.to_a.shuffle!]
 
-def deal_player_card(shoe)
-  player_new_card = shoe.flatten.sample.keys.sample
-  puts "You been dealt a #{player_new_card}. Hit or Stand?"
-end
+burn_card_stack = []
+dealer_hand = []
+player_hand = []
 
-def dealer_top_card(shoe)
-  dealer_top_card = shoe.flatten.sample.keys.sample
-  puts "Dealer has a "#{dealer_top_card}."
-end
+burn_card_stack << shoe.pop.pop
+dealer_hand << shoe.pop.pop
+player_hand << shoe.pop.pop
+dealer_hand << shoe.pop.pop
 
-def dealer_bottom_card(shoe)
-  dealer_bottom_card = shoe.flatten.sample.keys.sample
-end
 
 def hit(shoe)
   deal_player_card(shoe)
 end
 
-dealer_hand = dealer_top_card[
-def check_for_winner
+
+#def check_for_winner
 
 
 puts "Welcome to Blackjack!"
+puts "Dealer has a  #{dealer_hand[0][0]}"
+puts "You have a #{player_hand[0][0]}"
+puts "Do you want to Hit or Stand? (Type '1' to Hit, and '2' to Stand)"
+hit_or_stand = gets.chomp.to_s
 
-puts dealer_top_card(shoe)
-puts dealer_bottom_card(shoe)
-puts deal_player_card(shoe)
 
 
 

@@ -47,34 +47,43 @@ burn_card_stack = []
 dealer_hand = []
 player_hand = []
 
-burn_card_stack << shoe.sample.pop
-dealer_hand << shoe.sample.pop
-player_hand << shoe.sample.pop
-dealer_hand << shoe.sample.pop
-binding.pry
-player_hand << shoe.sample.pop
+def burn_card(shoe, burn_card_stack)
+  burn_card_stack << shoe.sample.pop
+end
 
+def deal_card_to_player(shoe, player_hand)
+  player_hand << shoe.sample.pop
+end
+
+def deal_card_to_dealer(shoe, dealer_hand)
+  dealer_hand << shoe.sample.pop
+end
 puts "Welcome to Blackjack!"
-puts "The #{burn_card_stack[0][0]} card has been burned!"
+
+burn_card(shoe, burn_card_stack)
+deal_card_to_dealer(shoe, dealer_hand)
+deal_card_to_player(shoe, player_hand)
+deal_card_to_dealer(shoe, dealer_hand)
+deal_card_to_player(shoe, player_hand)
+
+
+puts "Card has been burned. No more bets!"
 
 #until #{dealer_hand[0][1].chomp.to_i} >= 17
 # say "Dealer has a  #{dealer_hand[0][0]}"
 
-
-
-
-  
-
 say "Dealer's hand: #{dealer_hand[0][0]} (plus hidden card)"
-say "Player's hand: #{player_hand[0][0]}"
+say "Player's hand: #{player_hand[0][0]} ; #{player_hand[1][0]}"
 puts "Do you want to Hit or Stand? (Type '1' to Hit, and '2' to Stand)"
-hit_or_stand = gets.chomp.to_i
+hit_or_stand = gets.chomp.to_s
 
 if hit_or_stand == '1'
   player_hand << shoe.sample.pop
+  say "Player's hand: #{player_hand[0][0]} + #{player_hand[1][0]} + #{player_hand[2][0]}"
 else
   puts "Time to see who won!"
 end
+
 
 
 puts "Thanks for playing!"

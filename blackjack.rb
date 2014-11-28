@@ -44,50 +44,104 @@ deck_four = { 'two_of_hearts' =>  2, 'three_of_hearts' => 3, 'four_of_hearts' =>
 shoe = [deck_one.to_a.shuffle!, deck_two.to_a.shuffle!, deck_three.to_a.shuffle!, deck_four.to_a.shuffle!]
 
 burn_card_stack = []
+
 dealer_hand = []
+dealer_sum = 0
+
 player_hand = []
+player_sum = 0
 
 def burn_card(shoe, burn_card_stack)
   burn_card_stack << shoe.sample.pop
+end
+
+def deal_card_to_dealer(shoe, dealer_hand)
+  dealer_hand << shoe.sample.pop
 end
 
 def deal_card_to_player(shoe, player_hand)
   player_hand << shoe.sample.pop
 end
 
-def deal_card_to_dealer(shoe, dealer_hand)
-  dealer_hand << shoe.sample.pop
+def calculate_hand_sum(hand)
+  hand.reduce( :+ )
 end
+
+
+# def calculate_dealer_hand_sum(dealer_hand, dealer_sum)
+#   values = dealer_hand.flatten.values_at(1, 3)
+#   dealer_sum = values.inject(:+)
+# end
+
+# def calculate_player_hand_sum(player_hand, player_sum)
+#   values = player_hand.flatten.values_at(1, 3, 5)
+#   if values[5] == nil
+#     values.pop
+#     player_sum = values.inject(:+)
+#   else
+#     values = player_hand.flatten.values_at(1, 3, 5)
+#     player_sum = values.inject(:+)
+#   end
+# end
+
+
+# def calculate_dealer_hand_sum(dealer_hand, dealer_sum)
+#   dealer_sum = dealer_hand.flatten[1]  
+#   dealer_hand.flatten!
+#   dealer_sum = dealer_hand[1] + dealer_hand[3]
+# end
+
+# def calculate_player_hand_sum(player_hand, player_sum)
+#   player_hand.flatten!
+#   if player_hand[5] == nil
+#     player_sum = player_hand[1] + player_hand[3]
+#   else
+#     player_sum = player_hand[1] + player_hand[3] + player_hand[5]
+#   end
+# end
+
+
+
+
+
 puts "Welcome to Blackjack!"
 
+puts "What's your name?"
+name = gets.chomp.to_s
+
 burn_card(shoe, burn_card_stack)
-deal_card_to_dealer(shoe, dealer_hand)
-deal_card_to_player(shoe, player_hand)
-deal_card_to_dealer(shoe, dealer_hand)
-deal_card_to_player(shoe, player_hand)
-
-
 puts "Card has been burned. No more bets!"
 
-#until #{dealer_hand[0][1].chomp.to_i} >= 17
-# say "Dealer has a  #{dealer_hand[0][0]}"
+deal_card_to_dealer(shoe, dealer_hand)
+deal_card_to_player(shoe, player_hand)
+deal_card_to_dealer(shoe, dealer_hand)
+deal_card_to_player(shoe, player_hand)
 
-say "Dealer's hand: #{dealer_hand[0][0]} (plus hidden card)"
-say "Player's hand: #{player_hand[0][0]} ; #{player_hand[1][0]}"
+dealer_sum = calculate_hand_sum(dealer_hand)
+player_sum = calculate_hand_sum(player_hand)
+
+puts "---"
+say "Dealer's hand: #{dealer_hand[0][0]}."
+say "Dealer has #{dealer_hand[0][1]}"
+say "Dealer really has #{dealer_sum}"
+puts "---"
+say "Player's hand: #{player_hand[0][0]} | #{player_hand[1][0]}"
+puts "You're sitting on #{player_sum}."
+puts "---"
 puts "Do you want to Hit or Stand? (Type '1' to Hit, and '2' to Stand)"
 hit_or_stand = gets.chomp.to_s
 
 if hit_or_stand == '1'
   player_hand << shoe.sample.pop
-  say "Player's hand: #{player_hand[0][0]} + #{player_hand[1][0]} + #{player_hand[2][0]}"
+  say "Player's hand: #{player_hand[0][0]} | #{player_hand[1][0]} | #{player_hand[2][0]}"
 else
   puts "Time to see who won!"
 end
 
-
+calculate_dealer_hand_sum(dealer_hand, dealer_sum)
+calculate_player_hand_sum(player_hand, player_sum)
 
 puts "Thanks for playing!"
-
 
 
 

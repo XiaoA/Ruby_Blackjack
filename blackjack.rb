@@ -55,58 +55,28 @@ def burn_card(shoe, burn_card_stack)
   burn_card_stack << shoe.sample.pop
 end
 
-def deal_card_to_dealer(shoe, dealer_hand)
-  dealer_hand << shoe.sample.pop
-end
-
-def deal_card_to_player(shoe, player_hand)
-  player_hand << shoe.sample.pop
+def deal_card(shoe, hand)
+  hand << shoe.sample.pop
 end
 
 def calculate_hand_sum(hand)
-  num = hand.flatten.select{|num| num.to_i.to_s == num.to_s}
+  num = hand.flatten.select{ |num| num.to_s =~ /\d+$/ }
   num.reduce( :+ )
 end
 
 def show_hand(hand)
-  hand.flatten.select{|card| card.to_i.to_s != card.to_s}
+  hand.flatten.select{ |card| card.to_s =~ /\D+$/ }
 end
 
-# def calculate_dealer_hand_sum(dealer_hand, dealer_sum)
-#   values = dealer_hand.flatten.values_at(1, 3)
-#   dealer_sum = values.inject(:+)
-# end
-
-# def calculate_player_hand_sum(player_hand, player_sum)
-#   values = player_hand.flatten.values_at(1, 3, 5)
-#   if values[5] == nil
-#     values.pop
-#     player_sum = values.inject(:+)
-#   else
-#     values = player_hand.flatten.values_at(1, 3, 5)
-#     player_sum = values.inject(:+)
-#   end
-# end
-
-
-# def calculate_dealer_hand_sum(dealer_hand, dealer_sum)
-#   dealer_sum = dealer_hand.flatten[1]  
-#   dealer_hand.flatten!
-#   dealer_sum = dealer_hand[1] + dealer_hand[3]
-# end
-
-# def calculate_player_hand_sum(player_hand, player_sum)
-#   player_hand.flatten!
-#   if player_hand[5] == nil
-#     player_sum = player_hand[1] + player_hand[3]
-#   else
-#     player_sum = player_hand[1] + player_hand[3] + player_hand[5]
-#   end
-# end
-
-
-
-
+def blackjack_or_bust(hand)
+  calculate_hand_sum(hand)
+  if dealer_hand >= 21
+    puts "Dealer busts. #{name} wins!"
+  elsif
+    player_hand >= 21
+    puts "#{name} busts. The house wins."
+  end
+end
 
 puts "Welcome to Blackjack!"
 
@@ -116,10 +86,10 @@ name = gets.chomp
 burn_card(shoe, burn_card_stack)
 puts "Card has been burned. No more bets!"
 
-deal_card_to_dealer(shoe, dealer_hand)
-deal_card_to_player(shoe, player_hand)
-deal_card_to_dealer(shoe, dealer_hand)
-deal_card_to_player(shoe, player_hand)
+deal_card(shoe, dealer_hand)
+deal_card(shoe, player_hand)
+deal_card(shoe, dealer_hand)
+deal_card(shoe, player_hand)
 
 dealer_sum = calculate_hand_sum(dealer_hand)
 player_sum = calculate_hand_sum(player_hand)
@@ -132,17 +102,21 @@ puts "Dealer has #{dealer_hand[0][1]} (plus hidden card...)"
 
 puts "---"
 say "#{name}'s hand: #{player_hand}"
-puts "#{name}, you've got #{player_sum}."
+puts "#{name} has #{player_sum}."
 puts "---"
 puts "Do you want to Hit or Stand? (Type '1' to Hit, or '2' to Stand)"
 
 hit_or_stand = gets.chomp.to_s
 
 if hit_or_stand == '1'
-  deal_card_to_player(shoe, player_hand)
-  say " is holding: #{player_hand[0][0]} | #{player_hand[1][0]} | #{player_hand[2][0]}"
+  deal_card(shoe, player_hand)
+  show_hand(player_hand)
+  calculate_hand_sum(player_hand)
+  say "#{name}'s hand: #{player_hand}"
+  puts "#{name} has #{player_sum}."
 else
-  puts "Time to see who won!"
+  puts "#{name} stands with #{player_sum}!"
 end
 
 puts "Thanks for playing, #{name}!"
+

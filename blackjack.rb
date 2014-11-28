@@ -83,13 +83,17 @@ puts "Welcome to Blackjack!"
 puts "What's your name?"
 name = gets.chomp
 
+loop do
+
 burn_card(shoe, burn_card_stack)
 puts "Card has been burned. No more bets!"
+
 
 deal_card(shoe, dealer_hand)
 deal_card(shoe, player_hand)
 deal_card(shoe, dealer_hand)
 deal_card(shoe, player_hand)
+
 
 dealer_sum = calculate_hand_sum(dealer_hand)
 player_sum = calculate_hand_sum(player_hand)
@@ -104,6 +108,8 @@ puts "---"
 say "#{name}'s hand: #{player_hand}"
 puts "#{name} has #{player_sum}."
 puts "---"
+
+
 puts "Do you want to Hit or Stand? (Type '1' to Hit, or '2' to Stand)"
 
 hit_or_stand = gets.chomp.to_s
@@ -118,5 +124,14 @@ else
   puts "#{name} stands with #{player_sum}!"
 end
 
+puts "Would you like to play again? (y/n)"
+play_again = gets.chomp.downcase
+
+break if play_again == 'n'
+end
+
 puts "Thanks for playing, #{name}!"
+
+
+
 

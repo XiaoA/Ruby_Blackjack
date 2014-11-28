@@ -64,11 +64,13 @@ def deal_card_to_player(shoe, player_hand)
 end
 
 def calculate_hand_sum(hand)
-  #hand.reduce( :+ )
   num = hand.flatten.select{|num| num.to_i.to_s == num.to_s}
   num.reduce( :+ )
 end
 
+def show_hand(hand)
+  hand.flatten.select{|card| card.to_i.to_s != card.to_s}
+end
 
 # def calculate_dealer_hand_sum(dealer_hand, dealer_sum)
 #   values = dealer_hand.flatten.values_at(1, 3)
@@ -122,27 +124,25 @@ deal_card_to_player(shoe, player_hand)
 dealer_sum = calculate_hand_sum(dealer_hand)
 player_sum = calculate_hand_sum(player_hand)
 
-puts "---"
-say "Dealer's hand: [#{dealer_hand[0][0]}]."
-puts "Dealer has #{dealer_hand[0][1]}"
+player_hand = show_hand(player_hand)
 
 puts "---"
-say "#{name}'s hand: [#{player_hand[0][0]}] | [#{player_hand[1][0]}]"
+say "Dealer's hand: [#{dealer_hand[0][0]}] (plus hidden card...)."
+puts "Dealer has #{dealer_hand[0][1]} (plus hidden card...)"
+
+puts "---"
+say "#{name}'s hand: #{player_hand}"
 puts "#{name}, you've got #{player_sum}."
 puts "---"
 puts "Do you want to Hit or Stand? (Type '1' to Hit, or '2' to Stand)"
 
-hit_or_stand = gets.chomp
+hit_or_stand = gets.chomp.to_s
 
-# if hit_or_stand == '1'
-#   player_hand << shoe.sample.pop
-#   say " is holding: #{player_hand[0][0]} | #{player_hand[1][0]} | #{player_hand[2][0]}"
-# else
-#   puts "Time to see who won!"
-# end
+if hit_or_stand == '1'
+  deal_card_to_player(shoe, player_hand)
+  say " is holding: #{player_hand[0][0]} | #{player_hand[1][0]} | #{player_hand[2][0]}"
+else
+  puts "Time to see who won!"
+end
 
 puts "Thanks for playing, #{name}!"
-
-
-
-

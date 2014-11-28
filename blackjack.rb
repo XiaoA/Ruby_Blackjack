@@ -60,8 +60,8 @@ def deal_card(shoe, hand)
 end
 
 def calculate_hand_sum(hand)
-  num = hand.flatten.select{ |num| num.to_s =~ /\d+$/ }
-  num.reduce( :+ )
+  sum = hand.flatten.select{ |num| num.to_s =~ /\d+$/ }
+  sum.reduce( :+ )
 end
 
 def show_hand(hand)
@@ -110,8 +110,8 @@ hit_or_stand = gets.chomp.to_s
 
 if hit_or_stand == '1'
   deal_card(shoe, player_hand)
-  show_hand(player_hand)
-  calculate_hand_sum(player_hand)
+  player_sum = calculate_hand_sum(player_hand)
+  player_hand = show_hand(player_hand)
   say "#{name}'s hand: #{player_hand}"
   puts "#{name} has #{player_sum}."
 else

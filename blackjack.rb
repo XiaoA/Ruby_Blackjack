@@ -59,35 +59,51 @@ def deal_card(shoe, hand)
   hand << shoe.sample.pop
 end
 
+# def calculate_hand_sum(hand)
+#   sum = hand.flatten.select { |num| num.to_s =~ /\d+$/ }
+#   sum.reduce(:+)
+# end
+
 def calculate_hand_sum(hand)
-  sum = hand.flatten.select{ |num| num.to_s =~ /\d+$/ }
-  sum.reduce( :+ )
+  sum = hand.map{|e| e[1]}
+
+  total = 0
+  sum.each do |value|
+    if value == "A"
+      total += 11
+    else
+      total += value.to_i
+    end
+
+    sum.select{|e| e == "A"}.count.times do
+      total -= 10 if total > 21
+    end
+  end
+  total
 end
 
 def show_hand(hand)
-  hand.flatten.select{ |card| card.to_s =~ /\D+$/ }
+  hand.flatten.select { |card| card.to_s =~ /\D+$/ }
 end
 
-def blackjack_or_bust(hand)
-  calculate_hand_sum(hand)
-  if dealer_hand >= 21
-    puts "Dealer busts. #{name} wins!"
-  elsif
-    player_hand >= 21
-    puts "#{name} busts. The house wins."
-  end
-end
-
+puts " "
+puts "====================="
 puts "Welcome to Blackjack!"
-
+puts "====================="
+puts " "
 puts "What's your name?"
 name = gets.chomp
 
 loop do
+puts "Place your bet. (You have $500)!"
+bet = gets.chomp.to_i
 
+say "#{name} bets \$#{bet}..."
+sleep 0.5
 burn_card(shoe, burn_card_stack)
-puts "Card has been burned. No more bets!"
 
+puts "Card has been burned. No more bets!"
+sleep 2.5
 
 deal_card(shoe, dealer_hand)
 deal_card(shoe, player_hand)
@@ -101,20 +117,32 @@ player_sum = calculate_hand_sum(player_hand)
 player_hand = show_hand(player_hand)
 
 puts "---"
+puts "Dealer receives first card."
+sleep 1.0
+puts "#{name} receives first card."
+sleep 1.0
+puts "Dealer receives second card."
+sleep 1.0
+puts "#{name} receives second card."
+sleep 1.0
+puts "---"
 say "Dealer's hand: [#{dealer_hand[0][0]}] (plus hidden card...)."
 puts "Dealer has #{dealer_hand[0][1]} (plus hidden card...)"
-
+sleep 0.5
 puts "---"
 say "#{name}'s hand: #{player_hand}"
 puts "#{name} has #{player_sum}."
 puts "---"
 
+sleep 0.5
 
-puts "Do you want to Hit or Stand? (Type '1' to Hit, or '2' to Stand)"
+# blackjack_or_bust(dealer_hand, player_hand)
 
-hit_or_stand = gets.chomp.to_s
+puts "Do you want to Hit or Stand? (Type 'h' to Hit, or 's' to Stand)"
+hit_or_stand = gets.chomp.downcase
 
-if hit_or_stand == '1'
+
+if hit_or_stand == 'h'
   deal_card(shoe, player_hand)
   player_sum = calculate_hand_sum(player_hand)
   player_hand = show_hand(player_hand)
@@ -123,6 +151,8 @@ if hit_or_stand == '1'
 else
   puts "#{name} stands with #{player_sum}!"
 end
+
+
 
 puts "Would you like to play again? (y/n)"
 play_again = gets.chomp.downcase

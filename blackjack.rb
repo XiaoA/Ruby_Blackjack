@@ -57,6 +57,10 @@ def show_hand(hand)
   hand.flatten.select { |card| card.to_s =~ /\D+$/ }
 end
 
+def settle_bets(bet)
+# code
+end
+  
 deck_one = { 'Two of Hearts' =>  2, 'Three of Hearts' => 3, 'Four of Hearts' =>  4, 'Five of Hearts' =>  5, 'Six of Hearts' =>  6, 'Seven of Hearts' =>  7, 'Eight of Hearts' =>  8, 'Nine of Hearts' =>  9, 'Ten of Hearts' =>  10, 'Jack of Hearts' =>  10, 'Queen of Hearts' => 10, 'King of Hearts' => 10, 'Ace of Hearts' => 11, 'Two of Clubs' =>  2, 'Three of Clubs' => 3, 'Four of Clubs' =>  4, 'Five of Clubs' =>  5, 'Six of Clubs' =>  6, 'Seven of Clubs' =>  7, 'Eight of Clubs' =>  8, 'Nine of Clubs' =>  9, 'Ten of Clubs' =>  10, 'Jack of Clubs' =>  10, 'Queen of Clubs' => 10, 'King of Clubs' => 10, 'Ace of Clubs' => 11, 'Two of Spades' =>  2, 'Three of Spades' => 3, 'Four of Spades' =>  4, 'Five of Spades' =>  5, 'Six of Spades' =>  6, 'Seven of Spades' =>  7, 'Eight of Spades' =>  8, 'Nine of Spades' =>  9, 'Ten of Spades' =>  10, 'Jack of Spades' =>  10, 'Queen of Spades' => 10, 'King of Spades' => 10, 'Ace of Spades' => 11, 'Two of Diamonds' =>  2, 'Three of Diamonds' => 3, 'Four of Diamonds' =>  4, 'Five of Diamonds' =>  5, 'Six of Diamonds' =>  6, 'Seven of Diamonds' =>  7, 'Eight of Diamonds' =>  8, 'Nine of Diamonds' =>  9, 'Ten of Diamonds' =>  10, 'Jack of Diamonds' =>  10, 'Queen of Diamonds' => 10, 'King of Diamonds' => 10, 'Ace of Diamonds' => 11 }
 
 deck_two = { 'Two of Hearts' =>  2, 'Three of Hearts' => 3, 'Four of Hearts' =>  4, 'Five of Hearts' =>  5, 'Six of Hearts' =>  6, 'Seven of Hearts' =>  7, 'Eight of Hearts' =>  8, 'Nine of Hearts' =>  9, 'Ten of Hearts' =>  10, 'Jack of Hearts' =>  10, 'Queen of Hearts' => 10, 'King of Hearts' => 10, 'Ace of Hearts' => 11, 'Two of Clubs' =>  2, 'Three of Clubs' => 3, 'Four of Clubs' =>  4, 'Five of Clubs' =>  5, 'Six of Clubs' =>  6, 'Seven of Clubs' =>  7, 'Eight of Clubs' =>  8, 'Nine of Clubs' =>  9, 'Ten of Clubs' =>  10, 'Jack of Clubs' =>  10, 'Queen of Clubs' => 10, 'King of Clubs' => 10, 'Ace of Clubs' => 11, 'Two of Spades' =>  2, 'Three of Spades' => 3, 'Four of Spades' =>  4, 'Five of Spades' =>  5, 'Six of Spades' =>  6, 'Seven of Spades' =>  7, 'Eight of Spades' =>  8, 'Nine of Spades' =>  9, 'Ten of Spades' =>  10, 'Jack of Spades' =>  10, 'Queen of Spades' => 10, 'King of Spades' => 10, 'Ace of Spades' => 11, 'Two of Diamonds' =>  2, 'Three of Diamonds' => 3, 'Four of Diamonds' =>  4, 'Five of Diamonds' =>  5, 'Six of Diamonds' =>  6, 'Seven of Diamonds' =>  7, 'Eight of Diamonds' =>  8, 'Nine of Diamonds' =>  9, 'Ten of Diamonds' =>  10, 'Jack of Diamonds' =>  10, 'Queen of Diamonds' => 10, 'King of Diamonds' => 10, 'Ace of Diamonds' => 11 }
@@ -67,6 +71,7 @@ deck_four = { 'Two of Hearts' =>  2, 'Three of Hearts' => 3, 'Four of Hearts' =>
 
 shoe = [deck_one.to_a.shuffle!, deck_two.to_a.shuffle!, deck_three.to_a.shuffle!, deck_four.to_a.shuffle!]
 
+system "clear"
 puts " "
 puts "====================="
 puts "Welcome to Blackjack!"
@@ -151,9 +156,9 @@ while player_sum < 21
   puts "Do you want to Hit or Stand, or do something else?:"
   puts "Type '1' to Hit"
   puts "Type '2' to Stand" 
-  puts "Type '3' to Double Down" 
-  puts "Type '4' for an Insurance Bet" 
-  puts "Type '?' for Help)"
+  puts "Type '3' to Double Down (If you have two cards of the same value)"
+  puts "Type '4' for an Insurance Bet (If the dealer's upcard is an Ace)" 
+  puts "Type '?' for Help"
   say "Enter [1], [2], [3], [4], or [?]."
   hit_or_stand = gets.chomp
 
@@ -172,16 +177,17 @@ while player_sum < 21
     puts "#{name} is receiving another card..."
     sleep 1.0
     system "clear"
-    if player_sum > 21
-      say "{name}'s hand: #{player_hand}."
-      puts "You busted. Dealer wins."
-    else
-      say "#{name} has #{player_hand}, for a new total of #{player_sum}."
-    end
+    # if player_sum > 21
+    #   say "#{name}'s hand: #{player_hand}."
+    #   puts "You busted. Dealer wins."
+    # else
+    say "#{name} has #{player_hand}, for a new total of #{player_sum}."
+    # end
     puts "----"
   elsif
     hit_or_stand == "2"
     puts "#{name} chooses to stand!"
+    system "clear"
     puts "Your hand: #{player_hand} has a value of #{player_sum}."
     break
   elsif hit_or_stand == "3"
@@ -189,6 +195,7 @@ while player_sum < 21
     if player_first_card_sum == player_second_card_sum 
       puts "#{name} chooses to double down!"
       puts "How much would you like to bet? You can be the same as you bet in the current hand, or half. (Type '1' for the same amount; type '2' for half."
+      # @TODO: FINISH Double Down
       double_down_bet = gets.chomp
     else
       puts "You can only double down when the value of your cards are the same."
@@ -231,7 +238,7 @@ while dealer_sum < 17
 end
 
 if (dealer_sum > player_sum) && (dealer_sum <= 21)
-  puts "Sorry, dealer wins."
+  puts "Sorry, dealer has a #{dealer_sum}. Dealer wins."
   puts "  "
 elsif (dealer_sum < player_sum) && (player_sum <= 21)
   puts "#{name} wins!"
@@ -248,3 +255,4 @@ puts "Would you like to play again? (y/n)"
 play_again = gets.chomp.downcase
 break if play_again == 'n'
 end
+

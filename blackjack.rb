@@ -27,6 +27,7 @@
 # Procedural Blackboard Game, written in Ruby
 require 'pry'
 
+
 def say(msg)
   puts "=> #{msg}"
 end
@@ -88,7 +89,6 @@ puts " "
 puts "What's your name?"
 name = gets.chomp
 
-
 puts "Place your bet. (You have $500)!"
 bet = gets.chomp.to_i
 
@@ -122,10 +122,11 @@ puts "Dealer receives second card."
 sleep 1.0
 puts "#{name} receives second card."
 sleep 1.0
+system 'clear'
 puts "---"
 puts "Dealer has one 'up card' (visible) , and a hidden card."
-say "The up card is: [#{dealer_up_card}]."
-puts "The value of the Dealer's up card is: #{dealer_up_card_sum}."
+say "The up card is: [#{dealer_up_card}], with a value of #{dealer_up_card_sum}."
+#puts "The value of all of Dealer's visible cards is: #{dealer_up_card_sum}."
 sleep 0.5
 puts "---"
 say "#{name}'s hand: #{player_hand}"
@@ -163,6 +164,10 @@ while player_sum < 21
     player_hand << hit[0]
     player_sum = (player_sum + hit[1])
     player_hand = show_hand(player_hand)
+    system "clear"
+    puts "#{name} is receiving another card..."
+    sleep 1.0
+    system "clear"
     say "#{name} has #{player_hand}, for a new total of #{player_sum}."
     puts "----"
   elsif
@@ -202,4 +207,5 @@ while dealer_sum < 17
     puts "Dealer busted. You win!"
   end
 end
+
 

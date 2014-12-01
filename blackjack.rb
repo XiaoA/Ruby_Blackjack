@@ -64,17 +64,17 @@ end
 
 def calculate_hand_sum(hand)
   sum = hand.map{|e| e[1]}
-
   total = 0
   sum.each do |value|
     total += value.to_i
   end
 
   sum.select{|e| e == 11}.count.times do
-      total -= 10 if total > 21
-    end
+    total -= 10 if total > 21
+  end
   total
 end
+
 
 def show_hand(hand)
   hand.flatten.select { |card| card.to_s =~ /\D+$/ }
@@ -88,7 +88,7 @@ puts " "
 puts "What's your name?"
 name = gets.chomp
 
-loop do
+
 puts "Place your bet. (You have $500)!"
 bet = gets.chomp.to_i
 
@@ -99,16 +99,19 @@ burn_card(shoe, burn_card_stack)
 puts "Card has been burned. No more bets!"
 sleep 2.5
 
-deal_card(shoe, dealer_hand)
 deal_card(shoe, player_hand)
 deal_card(shoe, dealer_hand)
 deal_card(shoe, player_hand)
+deal_card(shoe, dealer_hand)
 
-
-dealer_sum = calculate_hand_sum(dealer_hand)
 player_sum = calculate_hand_sum(player_hand)
+dealer_sum = calculate_hand_sum(dealer_hand)
+
+dealer_up_card = dealer_hand[0][0]
+dealer_up_card_sum = (dealer_hand[0][1] + dealer_hand[1][1])
 
 player_hand = show_hand(player_hand)
+dealer_hand = show_hand(dealer_hand)
 
 puts "---"
 puts "Dealer receives first card."
@@ -120,42 +123,83 @@ sleep 1.0
 puts "#{name} receives second card."
 sleep 1.0
 puts "---"
-say "Dealer's hand: [#{dealer_hand[0][0]}] (plus hidden card...)."
-puts "Dealer has #{dealer_hand[0][1]} (plus hidden card...)"
+puts "Dealer has one 'up card' (visible) , and a hidden card."
+say "The up card is: [#{dealer_up_card}]."
+puts "The value of the Dealer's up card is: #{dealer_up_card_sum}."
 sleep 0.5
 puts "---"
 say "#{name}'s hand: #{player_hand}"
 puts "#{name} has #{player_sum}."
 puts "---"
+#sleep 0.5
 
-sleep 0.5
-
-# blackjack_or_bust(dealer_hand, player_hand)
-
-puts "Do you want to Hit or Stand? (Type 'h' to Hit, or 's' to Stand)"
-hit_or_stand = gets.chomp.downcase
-
-
-if hit_or_stand == 'h'
-  deal_card(shoe, player_hand)
-  player_sum = calculate_hand_sum(player_hand)
-  player_hand = show_hand(player_hand)
+if player_sum == 21
+  puts "Congratulations, #{name}! You've hit Blackjack! You've won!"
+  exit
+elsif 
+  dealer_sum == 21
+  say "Dealer's hand: #{dealer_hand}"
+  puts "Sorry, Dealer hit Blackjack. You lose."
+  exit
+elsif player_sum > 25
   say "#{name}'s hand: #{player_hand}"
-  puts "#{name} has #{player_sum}."
-else
-  puts "#{name} stands with #{player_sum}!"
+  puts "Sorry, you've busted. You lose."
+  exit
 end
 
+while player_sum < 21
+  puts "Do you want to Hit or Stand, or do something else? (Type '1' to Hit, '2' to Stand, '3' to Double Down, '4' for an Insurance Bet, or '?' for Help)"
+  say "Enter [1], [2], [3], [4], or [?]."
+  hit_or_stand = gets.chomp
 
+  if !['1', '2', '3', '4', '?'].include?(hit_or_stand)
+    puts "You must enter a '1', '2', '3', '4', or '?'."
+    next
+  end
 
-puts "Would you like to play again? (y/n)"
-play_again = gets.chomp.downcase
-
-break if play_again == 'n'
+  if hit_or_stand == "1"
+    puts "#{name} chooses to hit!"
+    hit = shoe.sample.pop
+    player_hand << hit[0]
+    player_sum = (player_sum + hit[1])
+    player_hand = show_hand(player_hand)
+    say "#{name} has #{player_hand}, for a new total of #{player_sum}."
+    puts "----"
+  elsif
+    hit_or_stand == "2"
+    puts "#{name} chooses to stand!"
+    break
+  elsif hit_or_stand == "3"
+    puts "#{name} chooses to double down!"
+    break
+  elsif hit_or_stand == "4"
+    puts "#{name} chooses to make an insurance bet!"
+    break
+  elsif hit_or_stand == "?"
+    puts "Here are you options:"
+    say "Choose [1] to hit (get another card). You should definitely hit if the sum of your cards is less than 16. If it's 17 or higher, you'll risk losing by going over 21."
+    puts " "
+    say "Choose [2] to stand. If you have 17 or higher, this is usually a good choice. If you have 16 or less, don't choose this option, though, because the Dealer will always have at least 17."
+    puts " "
+    say "Choose [3] to double down. You can only do this if the value of both of your cards was the same. If you double down, you will have two separate hands, with two separate bets. You can bet either the same amount as the first hand, or half."
+    puts " "
+    say "Choose [4] to make an insurance bet. This is a side bet, separate from your original bet, that the deal will get a Blackjack. You can only make an insurance bet if the dealer's upcard (visible card) is an ACE."
+    puts "---"
+    puts " "
+  end
 end
 
-puts "Thanks for playing, #{name}!"
-
-
-
+while dealer_sum < 17
+  deal_card(shoe, dealer_hand)
+  dealer_sum = calculate_hand_sum(dealer_hand)
+  
+  if dealer_sum == 21
+    say "Dealer's hand: #{dealer_hand}"
+    puts "Sorry, Dealer hit Blackjack. You lose."
+    exit
+  elsif dealer_sum > 21
+    say "Dealer's hand: #{dealer_hand}"
+    puts "Dealer busted. You win!"
+  end
+end
 

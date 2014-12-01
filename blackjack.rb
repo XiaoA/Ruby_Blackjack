@@ -40,15 +40,15 @@ deck_three = { 'Two of Hearts' =>  2, 'Three of Hearts' => 3, 'Four of Hearts' =
 
 deck_four = { 'Two of Hearts' =>  2, 'Three of Hearts' => 3, 'Four of Hearts' =>  4, 'Five of Hearts' =>  5, 'Six of Hearts' =>  6, 'Seven of Hearts' =>  7, 'Eight of Hearts' =>  8, 'Nine of Hearts' =>  9, 'Ten of Hearts' =>  10, 'Jack of Hearts' =>  10, 'Queen of Hearts' => 10, 'King of Hearts' => 10, 'Ace of Hearts' => 11, 'Two of Clubs' =>  2, 'Three of Clubs' => 3, 'Four of Clubs' =>  4, 'Five of Clubs' =>  5, 'Six of Clubs' =>  6, 'Seven of Clubs' =>  7, 'Eight of Clubs' =>  8, 'Nine of Clubs' =>  9, 'Ten of Clubs' =>  10, 'Jack of Clubs' =>  10, 'Queen of Clubs' => 10, 'King of Clubs' => 10, 'Ace of Clubs' => 11, 'Two of Spades' =>  2, 'Three of Spades' => 3, 'Four of Spades' =>  4, 'Five of Spades' =>  5, 'Six of Spades' =>  6, 'Seven of Spades' =>  7, 'Eight of Spades' =>  8, 'Nine of Spades' =>  9, 'Ten of Spades' =>  10, 'Jack of Spades' =>  10, 'Queen of Spades' => 10, 'King of Spades' => 10, 'Ace of Spades' => 11, 'Two of Diamonds' =>  2, 'Three of Diamonds' => 3, 'Four of Diamonds' =>  4, 'Five of Diamonds' =>  5, 'Six of Diamonds' =>  6, 'Seven of Diamonds' =>  7, 'Eight of Diamonds' =>  8, 'Nine of Diamonds' =>  9, 'Ten of Diamonds' =>  10, 'Jack of Diamonds' =>  10, 'Queen of Diamonds' => 10, 'King of Diamonds' => 10, 'Ace of Diamonds' => 11 }
 
-shoe = [deck_one.to_a.shuffle!, deck_two.to_a.shuffle!, deck_three.to_a.shuffle!, deck_four.to_a.shuffle!]
+# shoe = [deck_one.to_a.shuffle!, deck_two.to_a.shuffle!, deck_three.to_a.shuffle!, deck_four.to_a.shuffle!]
 
-burn_card_stack = []
+# burn_card_stack = []
 
-dealer_hand = []
-dealer_sum = 0
+# dealer_hand = []
+# dealer_sum = 0
 
-player_hand = []
-player_sum = 0
+# player_hand = []
+# player_sum = 0
 
 def burn_card(shoe, burn_card_stack)
   burn_card_stack << shoe.sample.pop
@@ -57,11 +57,6 @@ end
 def deal_card(shoe, hand)
   hand << shoe.sample.pop
 end
-
-# def calculate_hand_sum(hand)
-#   sum = hand.flatten.select { |num| num.to_s =~ /\d+$/ }
-#   sum.reduce(:+)
-# end
 
 def calculate_hand_sum(hand)
   sum = hand.map{|e| e[1]}
@@ -76,10 +71,10 @@ def calculate_hand_sum(hand)
   total
 end
 
-
 def show_hand(hand)
   hand.flatten.select { |card| card.to_s =~ /\D+$/ }
 end
+
 
 puts " "
 puts "====================="
@@ -94,10 +89,20 @@ bet = gets.chomp.to_i
 
 say "#{name} bets \$#{bet}..."
 sleep 0.5
+
+shoe = [deck_one.to_a.shuffle!, deck_two.to_a.shuffle!, deck_three.to_a.shuffle!, deck_four.to_a.shuffle!]
+
+burn_card_stack = []
 burn_card(shoe, burn_card_stack)
 
 puts "Card has been burned. No more bets!"
 sleep 2.5
+
+dealer_hand = []
+dealer_sum = 0
+
+player_hand = []
+player_sum = 0
 
 deal_card(shoe, player_hand)
 deal_card(shoe, dealer_hand)
@@ -108,7 +113,7 @@ player_sum = calculate_hand_sum(player_hand)
 dealer_sum = calculate_hand_sum(dealer_hand)
 
 dealer_up_card = dealer_hand[0][0]
-dealer_up_card_sum = (dealer_hand[0][1] + dealer_hand[1][1])
+dealer_up_card_sum = dealer_hand[0][1]
 
 player_hand = show_hand(player_hand)
 dealer_hand = show_hand(dealer_hand)
@@ -168,7 +173,12 @@ while player_sum < 21
     puts "#{name} is receiving another card..."
     sleep 1.0
     system "clear"
-    say "#{name} has #{player_hand}, for a new total of #{player_sum}."
+    if player_sum > 21
+      say "{name}'s hand: #{player_hand}."
+      puts "You busted. Dealer wins."
+    else
+      say "#{name} has #{player_hand}, for a new total of #{player_sum}."
+    end
     puts "----"
   elsif
     hit_or_stand == "2"

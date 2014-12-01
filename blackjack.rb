@@ -124,6 +124,11 @@ deal_card(shoe, dealer_hand)
 player_sum = calculate_hand_sum(player_hand)
 dealer_sum = calculate_hand_sum(dealer_hand)
 
+player_first_card = player_hand[0][0]
+player_first_card_sum = player_hand[0][1]
+player_second_card = player_hand[1][0]
+player_first_card_sum = player_hand[1][1]
+
 dealer_up_card = dealer_hand[0][0]
 dealer_up_card_sum = dealer_hand[0][1]
 
@@ -203,11 +208,26 @@ while player_sum < 21
     puts "#{name} chooses to stand!"
     break
   elsif hit_or_stand == "3"
-    puts "#{name} chooses to double down!"
-    binding.pry
-
+    system "clear"
+    if player_first_card_sum == player_second_card_sum 
+      puts "#{name} chooses to double down!"
+      puts "How much would you like to bet? You can be the same as you bet in the current hand, or half. (Type '1' for the same amount; type '2' for half."
+      double_down_bet = gets.chomp
+    else
+      puts "You can only double down when the value of your cards are the same."
+      puts "---"
+      puts "  "
+    end
   elsif hit_or_stand == "4"
-    puts "#{name} chooses to make an insurance bet!"
+    system "clear"
+    if dealer_up_card_sum == 11
+      puts "#{name} chooses to make an insurance bet!"
+
+    else
+      puts "Sorry, you can only double down when the Dealer's up card is an Ace. The dealer's up card is: #{dealer_up_card}."
+      puts "---"
+      puts "  "
+      
     break
   elsif hit_or_stand == "?"
     puts "Here are you options:"

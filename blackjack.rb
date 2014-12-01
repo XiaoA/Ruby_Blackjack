@@ -127,7 +127,7 @@ dealer_sum = calculate_hand_sum(dealer_hand)
 player_first_card = player_hand[0][0]
 player_first_card_sum = player_hand[0][1]
 player_second_card = player_hand[1][0]
-player_first_card_sum = player_hand[1][1]
+player_second_card_sum = player_hand[1][1]
 
 dealer_up_card = dealer_hand[0][0]
 dealer_up_card_sum = dealer_hand[0][1]
@@ -222,14 +222,13 @@ while player_sum < 21
     system "clear"
     if dealer_up_card_sum == 11
       puts "#{name} chooses to make an insurance bet!"
-
     else
       puts "Sorry, you can only double down when the Dealer's up card is an Ace. The dealer's up card is: #{dealer_up_card}."
       puts "---"
       puts "  "
-      
-    break
+    end
   elsif hit_or_stand == "?"
+    system "clear"
     puts "Here are you options:"
     say "Choose [1] to hit (get another card). You should definitely hit if the sum of your cards is less than 16. If it's 17 or higher, you'll risk losing by going over 21."
     puts " "

@@ -247,11 +247,9 @@ while dealer_sum < 17
   dealer_sum = calculate_hand_sum(dealer_hand)
   
   if dealer_sum == 21
-    say "Dealer's hand: #{dealer_hand}"
     puts "Sorry, Dealer hit Blackjack. You lose."
     exit
   elsif dealer_sum > 21
-    say "Dealer's hand: #{dealer_hand}"
     puts "Dealer busted. You win!"
   end
 end

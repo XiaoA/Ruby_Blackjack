@@ -27,7 +27,6 @@
 # Procedural Blackboard Game, written in Ruby
 require 'pry'
 
-
 def say(msg)
   puts "=> #{msg}"
 end
@@ -76,37 +75,26 @@ puts " "
 puts "What's your name?"
 name = gets.chomp
 
-loop do
-  if name != /\d+$/
-    puts "You have to tell me your name, or I won't know what to call you. Please enter your name..."
-    name = gets.chomp
-    break if name =~ /\D+$/
-  end
-end
-
 player_cash_pot = 500  
 
 loop do
 
 puts "  "  
 puts "---"
-puts "The minimum bet is $5, and the maximum is $500. Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
+puts "The minimum bet is $5, and the maximum is $500."
+puts "Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
 puts "---"
 puts "  "
 puts "Place your bet. (You have \$#{player_cash_pot})!"
+
 bet = gets.chomp.to_i
 
-if (bet < 5) || (bet > 500)
-  puts "The minimum bet is $5, and the maximum is $500. Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
-end
-
-say "#{name} bets \$#{bet}..."
 sleep 0.5
 
 burn_card_stack = []
 burn_card(shoe, burn_card_stack)
 
-puts "Card has been burned. No more bets!"
+puts "No more bets!"
 sleep 2.5
 
 dealer_hand = []
@@ -135,6 +123,8 @@ player_hand = show_hand(player_hand)
 dealer_hand = show_hand(dealer_hand)
 
 puts "---"
+puts "(Dealer burns first card)"
+sleep 0.5
 puts "#{name} receives first card."
 sleep 1.0
 puts "Dealer receives first card."
@@ -148,38 +138,21 @@ puts "---"
 puts "Dealer has one 'up card' (visible) , and a hidden card."
 say "The up card is: [#{dealer_up_card}], with a value of #{dealer_up_card_sum}."
 
-# if dealer_up_card_sum == 11
-#   puts "The dealer got an Ace. In a moment, you can make an insurance bet, if you want."
-# else
-# end
-
 sleep 0.5
 puts "---"
 say "#{name}'s hand: #{player_hand}"
 puts "#{name} has #{player_sum}."
 puts "---"
-#sleep 0.5
-
-# ???
-# if player_sum == 21
-#   puts "Congratulations, #{name}! You've hit Blackjack! You've won!"
-# elsif player_sum > 21
-#   say "#{name}'s hand: #{player_hand}"
-#   puts "Sorry, you've busted. You lose."
-# end
 
 while player_sum < 21
-  puts "Do you want to Hit or Stand, or do something else?:"
+  puts "Do you want to Hit or Stand?"
   puts "Type '1' to Hit"
   puts "Type '2' to Stand" 
-  puts "Type '3' to Double Down (If you have two cards of the same value)"
-  puts "Type '4' for an Insurance Bet (If the dealer's upcard is an Ace)" 
-  puts "Type '?' for Help"
-  say "Enter [1], [2], [3], [4], or [?]."
+  say "Enter [1] or [2]."
   hit_or_stand = gets.chomp
   
-  if !['1', '2', '3', '4', '?'].include?(hit_or_stand)
-    puts "You must enter a '1', '2', '3', '4', or '?'."
+  if !['1', '2'].include?(hit_or_stand)
+    puts "You must enter a '1', or a '2'."
   end
 
   if hit_or_stand == "1"
@@ -201,60 +174,11 @@ while player_sum < 21
     puts "Your hand: #{player_hand} has a value of #{player_sum}."
     break
   end
-  
-  # case hit_or_stand == "3"
-  #     #system "clear"
-  # when player_first_card_sum == player_second_card_sum 
-  #   puts "#{name} chooses to double down!"
-  #   puts "How much would you like to bet? You can be the same as you bet in the current hand, or half. (Type '1' for the same amount; type '2' for half."
-  #     # @TODO: FINISH Double Down
-  #   double_down_bet = gets.chomp
-  # else
-  #   puts "You can only double down when the value of your cards are the same."
-  #   puts "---"
-  #   puts "  "
-  # end
-  
-  # case hit_or_stand == "4"
-  #     system "clear"
-  # when dealer_up_card_sum == 11
-  #   puts "#{name} chooses to make an insurance bet!"
-  # else
-  #   puts "Sorry, you can only double down when the dealer's up card is an Ace. The dealer's up card is: #{dealer_up_card}."
-  #   puts "---"
-  #   puts "  "
-  # end
-  
-  # case hit_or_stand == "?"
-  #     system "clear"
-  #     puts "Here are your options:"
-  #     say "Choose [1] to hit (get another card). You should definitely hit if the sum of your cards is less than 16. If it's 17 or higher, you'll risk losing by going over 21."
-  #     puts " "
-  #     say "Choose [2] to stand. If you have 17 or higher, this is usually a good choice. If you have 16 or less, don't choose this option, though, because the dealer will always have at least 17."
-  #     puts " "
-  #     say "Choose [3] to double down. You can only do this if the value of both of your cards was the same. If you double down, you will have two separate hands, with two separate bets. You can bet either the same amount as the first hand, or half."
-  #     puts " "
-  #     say "Choose [4] to make an insurance bet. This is a side bet, separate from your original bet, that the deal will get a Blackjack. You can only make an insurance bet if the dealer's upcard (visible card) is an ACE."
-  #     puts "---"
-  #     puts " "
-  # end
 end
 
 while dealer_sum < 17
   deal_card(shoe, dealer_hand)
   dealer_sum = calculate_hand_sum(dealer_hand)
-
-  # ???
-  # if dealer_sum == 21
-  #   puts "Sorry, dealer hit Blackjack. You lose."
-  #   # player_cash_pot = (player_cash_pot - bet)
-  #   # puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
-  #   # exit
-  # elsif dealer_sum > 21
-  #   puts "Dealer busted. You win!"
-  #   # player_cash_pot = (bet * 1.5) + player_cash_pot
-  #   # puts "You won #{bet * 1.5}! You now have #{player_cash_pot}!"
-  # end
 end
 
 if (dealer_sum > player_sum) && (dealer_sum <= 21)

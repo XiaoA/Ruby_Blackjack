@@ -57,10 +57,6 @@ def show_hand(hand)
   hand.flatten.select { |card| card.to_s =~ /\D+$/ }
 end
 
-def settle_bets(bet)
-# code
-end
-  
 deck_one = { 'Two of Hearts' =>  2, 'Three of Hearts' => 3, 'Four of Hearts' =>  4, 'Five of Hearts' =>  5, 'Six of Hearts' =>  6, 'Seven of Hearts' =>  7, 'Eight of Hearts' =>  8, 'Nine of Hearts' =>  9, 'Ten of Hearts' =>  10, 'Jack of Hearts' =>  10, 'Queen of Hearts' => 10, 'King of Hearts' => 10, 'Ace of Hearts' => 11, 'Two of Clubs' =>  2, 'Three of Clubs' => 3, 'Four of Clubs' =>  4, 'Five of Clubs' =>  5, 'Six of Clubs' =>  6, 'Seven of Clubs' =>  7, 'Eight of Clubs' =>  8, 'Nine of Clubs' =>  9, 'Ten of Clubs' =>  10, 'Jack of Clubs' =>  10, 'Queen of Clubs' => 10, 'King of Clubs' => 10, 'Ace of Clubs' => 11, 'Two of Spades' =>  2, 'Three of Spades' => 3, 'Four of Spades' =>  4, 'Five of Spades' =>  5, 'Six of Spades' =>  6, 'Seven of Spades' =>  7, 'Eight of Spades' =>  8, 'Nine of Spades' =>  9, 'Ten of Spades' =>  10, 'Jack of Spades' =>  10, 'Queen of Spades' => 10, 'King of Spades' => 10, 'Ace of Spades' => 11, 'Two of Diamonds' =>  2, 'Three of Diamonds' => 3, 'Four of Diamonds' =>  4, 'Five of Diamonds' =>  5, 'Six of Diamonds' =>  6, 'Seven of Diamonds' =>  7, 'Eight of Diamonds' =>  8, 'Nine of Diamonds' =>  9, 'Ten of Diamonds' =>  10, 'Jack of Diamonds' =>  10, 'Queen of Diamonds' => 10, 'King of Diamonds' => 10, 'Ace of Diamonds' => 11 }
 
 deck_two = { 'Two of Hearts' =>  2, 'Three of Hearts' => 3, 'Four of Hearts' =>  4, 'Five of Hearts' =>  5, 'Six of Hearts' =>  6, 'Seven of Hearts' =>  7, 'Eight of Hearts' =>  8, 'Nine of Hearts' =>  9, 'Ten of Hearts' =>  10, 'Jack of Hearts' =>  10, 'Queen of Hearts' => 10, 'King of Hearts' => 10, 'Ace of Hearts' => 11, 'Two of Clubs' =>  2, 'Three of Clubs' => 3, 'Four of Clubs' =>  4, 'Five of Clubs' =>  5, 'Six of Clubs' =>  6, 'Seven of Clubs' =>  7, 'Eight of Clubs' =>  8, 'Nine of Clubs' =>  9, 'Ten of Clubs' =>  10, 'Jack of Clubs' =>  10, 'Queen of Clubs' => 10, 'King of Clubs' => 10, 'Ace of Clubs' => 11, 'Two of Spades' =>  2, 'Three of Spades' => 3, 'Four of Spades' =>  4, 'Five of Spades' =>  5, 'Six of Spades' =>  6, 'Seven of Spades' =>  7, 'Eight of Spades' =>  8, 'Nine of Spades' =>  9, 'Ten of Spades' =>  10, 'Jack of Spades' =>  10, 'Queen of Spades' => 10, 'King of Spades' => 10, 'Ace of Spades' => 11, 'Two of Diamonds' =>  2, 'Three of Diamonds' => 3, 'Four of Diamonds' =>  4, 'Five of Diamonds' =>  5, 'Six of Diamonds' =>  6, 'Seven of Diamonds' =>  7, 'Eight of Diamonds' =>  8, 'Nine of Diamonds' =>  9, 'Ten of Diamonds' =>  10, 'Jack of Diamonds' =>  10, 'Queen of Diamonds' => 10, 'King of Diamonds' => 10, 'Ace of Diamonds' => 11 }
@@ -81,9 +77,28 @@ puts "What's your name?"
 name = gets.chomp
 
 loop do
+  if name != /\d+$/
+    puts "You have to tell me your name, or I won't know what to call you. Please enter your name..."
+    name = gets.chomp
+    break if name =~ /\D+$/
+  end
+end
 
-puts "Place your bet. (You have $500)!"
+player_cash_pot = 500  
+
+loop do
+
+puts "  "  
+puts "---"
+puts "The minimum bet is $5, and the maximum is $500. Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
+puts "---"
+puts "  "
+puts "Place your bet. (You have \$#{player_cash_pot})!"
 bet = gets.chomp.to_i
+
+if (bet < 5) || (bet > 500)
+  puts "The minimum bet is $5, and the maximum is $500. Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
+end
 
 say "#{name} bets \$#{bet}..."
 sleep 0.5
@@ -120,23 +135,23 @@ player_hand = show_hand(player_hand)
 dealer_hand = show_hand(dealer_hand)
 
 puts "---"
-puts "Dealer receives first card."
-sleep 1.0
 puts "#{name} receives first card."
 sleep 1.0
-puts "Dealer receives second card."
+puts "Dealer receives first card."
 sleep 1.0
 puts "#{name} receives second card."
+sleep 1.0
+puts "Dealer receives second card."
 sleep 1.0
 system 'clear'
 puts "---"
 puts "Dealer has one 'up card' (visible) , and a hidden card."
 say "The up card is: [#{dealer_up_card}], with a value of #{dealer_up_card_sum}."
 
-if dealer_up_card_sum == 11
-  puts "The dealer got an Ace. In a moment, you can make an insurance bet, if you want."
-else
-end
+# if dealer_up_card_sum == 11
+#   puts "The dealer got an Ace. In a moment, you can make an insurance bet, if you want."
+# else
+# end
 
 sleep 0.5
 puts "---"
@@ -145,12 +160,13 @@ puts "#{name} has #{player_sum}."
 puts "---"
 #sleep 0.5
 
-if player_sum == 21
-  puts "Congratulations, #{name}! You've hit Blackjack! You've won!"
-elsif player_sum > 21
-  say "#{name}'s hand: #{player_hand}"
-  puts "Sorry, you've busted. You lose."
-end
+# ???
+# if player_sum == 21
+#   puts "Congratulations, #{name}! You've hit Blackjack! You've won!"
+# elsif player_sum > 21
+#   say "#{name}'s hand: #{player_hand}"
+#   puts "Sorry, you've busted. You lose."
+# end
 
 while player_sum < 21
   puts "Do you want to Hit or Stand, or do something else?:"
@@ -161,10 +177,9 @@ while player_sum < 21
   puts "Type '?' for Help"
   say "Enter [1], [2], [3], [4], or [?]."
   hit_or_stand = gets.chomp
-
+  
   if !['1', '2', '3', '4', '?'].include?(hit_or_stand)
     puts "You must enter a '1', '2', '3', '4', or '?'."
-    next
   end
 
   if hit_or_stand == "1"
@@ -177,78 +192,89 @@ while player_sum < 21
     puts "#{name} is receiving another card..."
     sleep 1.0
     system "clear"
-    # if player_sum > 21
-    #   say "#{name}'s hand: #{player_hand}."
-    #   puts "You busted. Dealer wins."
-    # else
     say "#{name} has #{player_hand}, for a new total of #{player_sum}."
-    # end
     puts "----"
-  elsif
-    hit_or_stand == "2"
+    break
+  elsif hit_or_stand == "2"
     puts "#{name} chooses to stand!"
     system "clear"
     puts "Your hand: #{player_hand} has a value of #{player_sum}."
     break
-  elsif hit_or_stand == "3"
-    system "clear"
-    if player_first_card_sum == player_second_card_sum 
-      puts "#{name} chooses to double down!"
-      puts "How much would you like to bet? You can be the same as you bet in the current hand, or half. (Type '1' for the same amount; type '2' for half."
-      # @TODO: FINISH Double Down
-      double_down_bet = gets.chomp
-    else
-      puts "You can only double down when the value of your cards are the same."
-      puts "---"
-      puts "  "
-    end
-  elsif hit_or_stand == "4"
-    system "clear"
-    if dealer_up_card_sum == 11
-      puts "#{name} chooses to make an insurance bet!"
-    else
-      puts "Sorry, you can only double down when the dealer's up card is an Ace. The dealer's up card is: #{dealer_up_card}."
-      puts "---"
-      puts "  "
-    end
-  elsif hit_or_stand == "?"
-    system "clear"
-    puts "Here are you options:"
-    say "Choose [1] to hit (get another card). You should definitely hit if the sum of your cards is less than 16. If it's 17 or higher, you'll risk losing by going over 21."
-    puts " "
-    say "Choose [2] to stand. If you have 17 or higher, this is usually a good choice. If you have 16 or less, don't choose this option, though, because the dealer will always have at least 17."
-    puts " "
-    say "Choose [3] to double down. You can only do this if the value of both of your cards was the same. If you double down, you will have two separate hands, with two separate bets. You can bet either the same amount as the first hand, or half."
-    puts " "
-    say "Choose [4] to make an insurance bet. This is a side bet, separate from your original bet, that the deal will get a Blackjack. You can only make an insurance bet if the dealer's upcard (visible card) is an ACE."
-    puts "---"
-    puts " "
   end
+  
+  # case hit_or_stand == "3"
+  #     #system "clear"
+  # when player_first_card_sum == player_second_card_sum 
+  #   puts "#{name} chooses to double down!"
+  #   puts "How much would you like to bet? You can be the same as you bet in the current hand, or half. (Type '1' for the same amount; type '2' for half."
+  #     # @TODO: FINISH Double Down
+  #   double_down_bet = gets.chomp
+  # else
+  #   puts "You can only double down when the value of your cards are the same."
+  #   puts "---"
+  #   puts "  "
+  # end
+  
+  # case hit_or_stand == "4"
+  #     system "clear"
+  # when dealer_up_card_sum == 11
+  #   puts "#{name} chooses to make an insurance bet!"
+  # else
+  #   puts "Sorry, you can only double down when the dealer's up card is an Ace. The dealer's up card is: #{dealer_up_card}."
+  #   puts "---"
+  #   puts "  "
+  # end
+  
+  # case hit_or_stand == "?"
+  #     system "clear"
+  #     puts "Here are your options:"
+  #     say "Choose [1] to hit (get another card). You should definitely hit if the sum of your cards is less than 16. If it's 17 or higher, you'll risk losing by going over 21."
+  #     puts " "
+  #     say "Choose [2] to stand. If you have 17 or higher, this is usually a good choice. If you have 16 or less, don't choose this option, though, because the dealer will always have at least 17."
+  #     puts " "
+  #     say "Choose [3] to double down. You can only do this if the value of both of your cards was the same. If you double down, you will have two separate hands, with two separate bets. You can bet either the same amount as the first hand, or half."
+  #     puts " "
+  #     say "Choose [4] to make an insurance bet. This is a side bet, separate from your original bet, that the deal will get a Blackjack. You can only make an insurance bet if the dealer's upcard (visible card) is an ACE."
+  #     puts "---"
+  #     puts " "
+  # end
 end
 
 while dealer_sum < 17
   deal_card(shoe, dealer_hand)
   dealer_sum = calculate_hand_sum(dealer_hand)
-  
-  if dealer_sum == 21
-    puts "Sorry, dealer hit Blackjack. You lose."
-  elsif dealer_sum > 21
-    puts "Dealer busted. You win!"
-  end
+
+  # ???
+  # if dealer_sum == 21
+  #   puts "Sorry, dealer hit Blackjack. You lose."
+  #   # player_cash_pot = (player_cash_pot - bet)
+  #   # puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
+  #   # exit
+  # elsif dealer_sum > 21
+  #   puts "Dealer busted. You win!"
+  #   # player_cash_pot = (bet * 1.5) + player_cash_pot
+  #   # puts "You won #{bet * 1.5}! You now have #{player_cash_pot}!"
+  # end
 end
 
 if (dealer_sum > player_sum) && (dealer_sum <= 21)
   puts "Sorry, dealer has a #{dealer_sum}. Dealer wins."
   puts "  "
+  player_cash_pot = (player_cash_pot - bet)
+  puts "You lost #{bet}. You now have #{player_cash_pot}."
 elsif (dealer_sum < player_sum) && (player_sum <= 21)
   puts "#{name} wins!"
   puts "  "
+  player_cash_pot = (bet * 1.5) + player_cash_pot
+  puts "You won #{bet * 1.5}! You now have #{player_cash_pot}!"
 elsif (dealer_sum == 21) && (player_sum == 21)
   puts "It's a push!"
   puts "  "
 else
-  puts "Sorry, dealer wins."
+  puts "Sorry, we both busted. Dealer wins."
   puts "  "
+  player_cash_pot = (player_cash_pot - bet)
+  puts "You lost #{bet}. You now have #{player_cash_pot}."
 end
 
 puts "Would you like to play again? (y/n)"
@@ -256,3 +282,4 @@ play_again = gets.chomp.downcase
 break if play_again == 'n'
 end
 
+puts "Thanks for playing!"

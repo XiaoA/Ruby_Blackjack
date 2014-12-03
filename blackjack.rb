@@ -191,7 +191,7 @@ loop do
     puts "  "
     player_cash_pot = (bet * 1.5) + player_cash_pot
     puts "You won #{bet * 1.5}! You now have #{player_cash_pot}!"
-  elsif (dealer_sum == 21) && (player_sum == 21)
+  elsif (dealer_sum >= 17) && (player_sum == dealer_sum)
     puts "It's a push!"
     puts "  "
   else

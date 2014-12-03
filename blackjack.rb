@@ -79,131 +79,131 @@ player_cash_pot = 500
 
 loop do
 
-puts "  "  
-puts "---"
-puts "The minimum bet is $5, and the maximum is $500."
-puts "Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
-puts "---"
-puts "  "
-puts "Place your bet. (You have \$#{player_cash_pot})!"
+  puts "  "  
+  puts "---"
+  puts "The minimum bet is $5, and the maximum is $500."
+  puts "Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
+  puts "---"
+  puts "  "
+  puts "Place your bet. (You have \$#{player_cash_pot})!"
 
-bet = gets.chomp.to_i
+  bet = gets.chomp.to_i
 
-sleep 0.5
+  sleep 0.5
 
-burn_card_stack = []
-burn_card(shoe, burn_card_stack)
+  burn_card_stack = []
+  burn_card(shoe, burn_card_stack)
 
-puts "No more bets!"
-sleep 2.5
+  puts "No more bets!"
+  sleep 2.5
 
-dealer_hand = []
-dealer_sum = 0
+  dealer_hand = []
+  dealer_sum = 0
 
-player_hand = []
-player_sum = 0
+  player_hand = []
+  player_sum = 0
 
-deal_card(shoe, player_hand)
-deal_card(shoe, dealer_hand)
-deal_card(shoe, player_hand)
-deal_card(shoe, dealer_hand)
-
-player_sum = calculate_hand_sum(player_hand)
-dealer_sum = calculate_hand_sum(dealer_hand)
-
-player_first_card = player_hand[0][0]
-player_first_card_sum = player_hand[0][1]
-player_second_card = player_hand[1][0]
-player_second_card_sum = player_hand[1][1]
-
-dealer_up_card = dealer_hand[0][0]
-dealer_up_card_sum = dealer_hand[0][1]
-
-player_hand = show_hand(player_hand)
-dealer_hand = show_hand(dealer_hand)
-
-puts "---"
-puts "(Dealer burns first card)"
-sleep 0.5
-puts "#{name} receives first card."
-sleep 1.0
-puts "Dealer receives first card."
-sleep 1.0
-puts "#{name} receives second card."
-sleep 1.0
-puts "Dealer receives second card."
-sleep 1.0
-system 'clear'
-puts "---"
-puts "Dealer has one 'up card' (visible) , and a hidden card."
-say "The up card is: [#{dealer_up_card}], with a value of #{dealer_up_card_sum}."
-
-sleep 0.5
-puts "---"
-say "#{name}'s hand: #{player_hand}"
-puts "#{name} has #{player_sum}."
-puts "---"
-
-while player_sum < 21
-  puts "Do you want to Hit or Stand?"
-  puts "Type '1' to Hit"
-  puts "Type '2' to Stand" 
-  say "Enter [1] or [2]."
-  hit_or_stand = gets.chomp
-  
-  if !['1', '2'].include?(hit_or_stand)
-    puts "You must enter a '1', or a '2'."
-  end
-
-  if hit_or_stand == "1"
-    puts "#{name} chooses to hit!"
-    hit = shoe.sample.pop
-    player_hand << hit[0]
-    player_sum = (player_sum + hit[1])
-    player_hand = show_hand(player_hand)
-    system "clear"
-    puts "#{name} is receiving another card..."
-    sleep 1.0
-    system "clear"
-    say "#{name} has #{player_hand}, for a new total of #{player_sum}."
-    puts "----"
-    break
-  elsif hit_or_stand == "2"
-    puts "#{name} chooses to stand!"
-    system "clear"
-    puts "Your hand: #{player_hand} has a value of #{player_sum}."
-    break
-  end
-end
-
-while dealer_sum < 17
+  deal_card(shoe, player_hand)
   deal_card(shoe, dealer_hand)
+  deal_card(shoe, player_hand)
+  deal_card(shoe, dealer_hand)
+
+  player_sum = calculate_hand_sum(player_hand)
   dealer_sum = calculate_hand_sum(dealer_hand)
-end
 
-if (dealer_sum > player_sum) && (dealer_sum <= 21)
-  puts "Sorry, dealer has a #{dealer_sum}. Dealer wins."
-  puts "  "
-  player_cash_pot = (player_cash_pot - bet)
-  puts "You lost #{bet}. You now have #{player_cash_pot}."
-elsif (dealer_sum < player_sum) && (player_sum <= 21)
-  puts "#{name} wins!"
-  puts "  "
-  player_cash_pot = (bet * 1.5) + player_cash_pot
-  puts "You won #{bet * 1.5}! You now have #{player_cash_pot}!"
-elsif (dealer_sum == 21) && (player_sum == 21)
-  puts "It's a push!"
-  puts "  "
-else
-  puts "Sorry, we both busted. Dealer wins."
-  puts "  "
-  player_cash_pot = (player_cash_pot - bet)
-  puts "You lost #{bet}. You now have #{player_cash_pot}."
-end
+  player_first_card = player_hand[0][0]
+  player_first_card_sum = player_hand[0][1]
+  player_second_card = player_hand[1][0]
+  player_second_card_sum = player_hand[1][1]
 
-puts "Would you like to play again? (y/n)"
-play_again = gets.chomp.downcase
-break if play_again == 'n'
+  dealer_up_card = dealer_hand[0][0]
+  dealer_up_card_sum = dealer_hand[0][1]
+
+  player_hand = show_hand(player_hand)
+  dealer_hand = show_hand(dealer_hand)
+
+  puts "---"
+  puts "(Dealer burns first card)"
+  sleep 0.5
+  puts "#{name} receives first card."
+  sleep 1.0
+  puts "Dealer receives first card."
+  sleep 1.0
+  puts "#{name} receives second card."
+  sleep 1.0
+  puts "Dealer receives second card."
+  sleep 1.0
+  system 'clear'
+  puts "---"
+  puts "Dealer has one 'up card' (visible) , and a hidden card."
+  say "The up card is: [#{dealer_up_card}], with a value of #{dealer_up_card_sum}."
+
+  sleep 0.5
+  puts "---"
+  say "#{name}'s hand: #{player_hand}"
+  puts "#{name} has #{player_sum}."
+  puts "---"
+
+  while player_sum < 21
+    puts "Do you want to Hit or Stand?"
+    puts "Type '1' to Hit"
+    puts "Type '2' to Stand" 
+    say "Enter [1] or [2]."
+    hit_or_stand = gets.chomp
+    
+    if !['1', '2'].include?(hit_or_stand)
+      puts "You must enter a '1', or a '2'."
+    end
+
+    if hit_or_stand == "1"
+      puts "#{name} chooses to hit!"
+      hit = shoe.sample.pop
+      player_hand << hit[0]
+      player_sum = (player_sum + hit[1])
+      player_hand = show_hand(player_hand)
+      system "clear"
+      puts "#{name} is receiving another card..."
+      sleep 1.0
+      system "clear"
+      say "#{name} has #{player_hand}, for a new total of #{player_sum}."
+      puts "----"
+      break
+    elsif hit_or_stand == "2"
+      puts "#{name} chooses to stand!"
+      system "clear"
+      puts "Your hand: #{player_hand} has a value of #{player_sum}."
+      break
+    end
+  end
+
+  while dealer_sum < 17
+    deal_card(shoe, dealer_hand)
+    dealer_sum = calculate_hand_sum(dealer_hand)
+  end
+
+  if (dealer_sum > player_sum) && (dealer_sum <= 21)
+    puts "Sorry, dealer has a #{dealer_sum}. Dealer wins."
+    puts "  "
+    player_cash_pot = (player_cash_pot - bet)
+    puts "You lost #{bet}. You now have #{player_cash_pot}."
+  elsif (dealer_sum < player_sum) && (player_sum <= 21)
+    puts "#{name} wins!"
+    puts "  "
+    player_cash_pot = (bet * 1.5) + player_cash_pot
+    puts "You won #{bet * 1.5}! You now have #{player_cash_pot}!"
+  elsif (dealer_sum == 21) && (player_sum == 21)
+    puts "It's a push!"
+    puts "  "
+  else
+    puts "Sorry, we both busted. Dealer wins."
+    puts "  "
+    player_cash_pot = (player_cash_pot - bet)
+    puts "You lost #{bet}. You now have #{player_cash_pot}."
+  end
+
+  puts "Would you like to play again? (y/n)"
+  play_again = gets.chomp.downcase
+  break if play_again == 'n'
 end
 
 puts "Thanks for playing!"

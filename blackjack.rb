@@ -9,7 +9,7 @@
 # - A way to force the dealer to deal at least to 17
 # - A way to set 21 as the winning hand, and a way to handle 'busts'
 # - A loop that allows the player to continue to play until he/she wants to quit
-# - A way to keep track of bets, and money.
+# - A way to keep track of bet.to_is, and money.
 # - A way to 'shuffle' the deck
 # - A way to deal cards to the dealer, so that the top card is visible, but the bottom card is hidden. (I'll then need to check the dealer's total. If less than 17 the deal has to hit; if 21, deal hit Blackjack; if > 21, dealer busts.)
 
@@ -101,9 +101,8 @@ player_sum = 0
 push = nil
 
 loop do
-binding.pry
+  system 'clear'
   if push == nil
-    puts "  "  
     puts "---"
     puts "The minimum bet is $5, and the maximum is $500."
     puts "Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
@@ -122,6 +121,7 @@ binding.pry
 
   puts "No more bets!"
   sleep 2.5
+  system "clear"
 
   dealer_hand = []
   dealer_sum = 0
@@ -164,18 +164,20 @@ binding.pry
   system 'clear'
   puts "---"
   puts "Dealer has one 'up card' (visible) , and a hidden card."
-  say "The up card is: [#{dealer_first_card}], with a value of #{dealer_first_card_sum}."
+  puts "The up card is: [#{dealer_first_card}]."
+  say "Dealer has #{dealer_first_card_sum}."
 
   sleep 0.5
   puts "---"
-  say "#{name}'s hand: #{player_hand}"
-  puts "#{name} has #{player_sum}."
+  puts "#{name}'s hand: #{player_hand}"
+  say "#{name} has #{player_sum}."
   puts "---"
 
   while player_sum < 21
     puts "Do you want to Hit or Stand?"
     puts "Type '1' to Hit"
     puts "Type '2' to Stand" 
+    puts " "
     say "Enter [1] or [2]."
     hit_or_stand = gets.chomp
     
@@ -213,105 +215,124 @@ binding.pry
 
   if (dealer_sum > 21) && (player_sum <= 21)
     system 'clear'
-    puts "#{name}'s hand: #{player_hand} for a value of #{player_sum}"
-    puts "dealer hand: #{dealer_hand} for a value of #{dealer_sum}"
     puts "---"
-    puts "  "
+    puts "#{name}'s hand: #{player_hand}"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand}"
+    say "value: #{dealer_sum}"
+    puts "---"
     puts "  "
     say "Dealer busted. You win!"
     puts "  "
-    player_cash_pot = (player_cash_pot + bet)
+    player_cash_pot = (player_cash_pot.to_i + bet)
     puts "You won \$#{bet}. You now have #{player_cash_pot}."
   elsif (player_sum == 21) && (dealer_sum <= 21)
     system 'clear'
-    puts "#{name}'s hand: #{player_hand} for a value of #{player_sum}"
-    puts "dealer hand: #{dealer_hand} for a value of #{dealer_sum}"
     puts "---"
-    puts "  "
+    puts "#{name}'s hand: #{player_hand}"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand}"
+    say "value: #{dealer_sum}"
+    puts "---"
     puts "  "
     say "#{name} got Blackjack!"
     puts "  "
-    player_cash_pot = player_cash_pot + (bet * 1.5)
-    puts "You won \$#{bet * 1.5}. You now have \$#{player_cash_pot}."
+    player_cash_pot = player_cash_pot.to_i + (bet.to_i * 1.5)
+    puts "You won \$#{bet.to_i * 1.5}. You now have \$#{player_cash_pot}."
   elsif (player_sum < 21) && (dealer_sum < player_sum)
     system 'clear'
-    puts "#{name}'s hand: #{player_hand} for a value of #{player_sum}"
-    puts "dealer hand: #{dealer_hand} for a value of #{dealer_sum}"
     puts "---"
-    puts "  "
+    puts "#{name}'s hand: #{player_hand}"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand}"
+    say "value: #{dealer_sum}"
+    puts "---"
     puts "  "
     puts "#{name} wins!"
     puts "  "
-    player_cash_pot = (player_cash_pot + bet)
-    puts "You won \$#{bet}. You now have \$#{player_cash_pot}."
+    player_cash_pot = (player_cash_pot.to_i + bet.to_i)
+    puts "You won \$#{bet.to_i}. You now have \$#{player_cash_pot}."
   elsif (player_sum < 21) && (dealer_sum < player_sum)
     system 'clear'
-    puts "#{name}'s hand: #{player_hand} for a value of #{player_sum}"
-    puts "dealer hand: #{dealer_hand} for a value of #{dealer_sum}"
+    puts "---"
+    puts "#{name}'s hand: #{player_hand}"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand}"
+    say "value: #{dealer_sum}"
     puts "---"
     puts "  "
     say "#{name} wins!"
     puts "  "
-    player_cash_pot = (player_cash_pot + bet)
-    puts "You won \$#{bet}. You now have \$#{player_cash_pot}."
+    player_cash_pot = (player_cash_pot.to_i + bet.to_i)
+    puts "You won \$#{bet.to_i}. You now have \$#{player_cash_pot}."
   elsif player_sum > 21 && dealer_sum <= 21
     system 'clear'
-    puts "#{name}'s hand: #{player_hand} for a value of #{player_sum}"
-    puts "dealer hand: #{dealer_hand} for a value of #{dealer_sum}"
     puts "---"
-    puts "  "
+    puts "#{name}'s hand: #{player_hand}"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand}"
+    say "value: #{dealer_sum}"
+    puts "---"
     puts "  "
     say "You busted!"
     puts "  "
-    player_cash_pot = (player_cash_pot - bet)
-    puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
+    player_cash_pot = (player_cash_pot.to_i - bet.to_i)
+    puts "You lost \$#{bet.to_i}. You now have \$#{player_cash_pot}."
   elsif (dealer_sum == 21) && (player_sum <= 21)
     system 'clear'
     puts "---"
-    puts "   "
-    puts "#{name}'s hand: #{player_hand}, for a value of #{player_sum}"
-    puts "Dealer's hand: #{dealer_hand}, for a value of #{dealer_sum}"
+    puts "#{name}'s hand: #{player_hand},"
+    say "value: #{player_sum}"
     puts "---"
-    puts "  "
+    puts "Dealer's hand: #{dealer_hand},"
+    say "value: #{dealer_sum}"
+    puts "---"
     say "dealer got blackjack!"
-    player_cash_pot = (player_cash_pot - bet)
+    player_cash_pot = (player_cash_pot.to_i - bet.to_i)
     puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
   elsif (dealer_sum < 21) && (player_sum < dealer_sum)
     system 'clear'
     puts "---"
-    puts "   "
-    puts "#{name}'s hand: #{player_hand}, for a value of #{player_sum}"
-    puts "Dealer's hand: #{dealer_hand}, for a value of #{dealer_sum}"
+    puts "#{name}'s hand: #{player_hand},"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand},"
+    say "value: #{dealer_sum}"
     puts "---"
     puts "  "
     say "Dealer wins"
-    player_cash_pot = (player_cash_pot - bet)
+    player_cash_pot = (player_cash_pot.to_i - bet.to_i)
     puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
-  elsif dealer_sum >= 17 && dealer_sum <= 21 && player_sum == dealer_sum
+  elsif (dealer_sum >= 17) && (dealer_sum <= 21) && (player_sum == dealer_sum)
     system 'clear'
-    push = dealer_sum >= 17 && dealer_sum <= 21 && player_sum == dealer_sum
+    push = (dealer_sum >= 17) && (dealer_sum <= 21) && (player_sum == dealer_sum)
     puts "---"
-    puts "   "
-    puts "#{name}'s hand: #{player_hand}, for a value of #{player_sum}"
-    puts "Dealer's hand: #{dealer_hand}, for a value of #{dealer_sum}"
+    puts "#{name}'s hand: #{player_hand},"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand},"
+    say "value: #{dealer_sum}"
     puts "---"
     puts "  "
     say "push"
-  elsif dealer_sum > 21 && player_sum > 21
+  elsif (dealer_sum > 21) && (player_sum > 21)
     system 'clear'
     puts "---"
-    puts "   "
-    puts "#{name}'s hand: #{player_hand}, for a value of #{player_sum}"
-    puts "Dealer's hand: #{dealer_hand}, for a value of #{dealer_sum}"
+    puts "#{name}'s hand: #{player_hand},"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand},"
+    say "value: #{dealer_sum}"
     puts "---"
     puts "  "
     say "we both busted. Player loses"
-    player_cash_pot = (player_cash_pot - bet)
+    player_cash_pot = (player_cash_pot.to_i - bet.to_i)
     puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
-  else
-    puts "edge case"
-    puts "#{name}'s hand: #{player_hand}, for a value of #{player_sum}"
-    puts "Dealer's hand: #{dealer_hand}, for a value of #{dealer_sum}"
   end
 
   puts "Would you like to play again? (y/n)"
@@ -320,3 +341,5 @@ binding.pry
 end
 
 puts "Thanks for playing!"
+sleep 0.5
+system 'clear'

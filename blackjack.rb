@@ -247,6 +247,20 @@ loop do
     puts "  "
     player_cash_pot = player_cash_pot.to_i + (bet.to_i * 1.5)
     puts "You won \$#{bet.to_i * 1.5}. You now have \$#{player_cash_pot}."
+  elsif (player_sum == 21) && (player_hand.count >=3) && (dealer_sum != 21)
+    system 'clear'
+    puts "---"
+    puts "#{name}'s hand: #{player_hand}"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand}"
+    say "value: #{dealer_sum}"
+    puts "---"
+    puts "  "
+    say "#{name} wins!"
+    puts "  "
+    player_cash_pot = (player_cash_pot.to_i + bet.to_i)
+    puts "You won \$#{bet}. You now have #{player_cash_pot}."
   elsif (player_sum < 21) && (dealer_sum < player_sum)
     system 'clear'
     puts "---"
@@ -261,7 +275,7 @@ loop do
     puts "  "
     player_cash_pot = (player_cash_pot.to_i + bet.to_i)
     puts "You won \$#{bet.to_i}. You now have \$#{player_cash_pot}."
-  elsif (player_sum < 21) && (dealer_sum < player_sum)
+  elsif (player_sum < 21) && (player_sum > dealer_sum)
     system 'clear'
     puts "---"
     puts "#{name}'s hand: #{player_hand}"
@@ -275,7 +289,7 @@ loop do
     puts "  "
     player_cash_pot = (player_cash_pot.to_i + bet.to_i)
     puts "You won \$#{bet.to_i}. You now have \$#{player_cash_pot}."
-  elsif player_sum > 21 && dealer_sum < 21
+  elsif (player_sum > 21) && (dealer_sum < 21)
     system 'clear'
     puts "---"
     puts "#{name}'s hand: #{player_hand}"
@@ -301,6 +315,19 @@ loop do
     say "dealer got blackjack!"
     player_cash_pot = (player_cash_pot.to_i - bet.to_i)
     puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
+  elsif (dealer_sum == 21) && (player_hand.count >= 3) && (player_sum != 21)
+    system 'clear'
+    puts "---"
+    puts "#{name}'s hand: #{player_hand}"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand}"
+    say "value: #{dealer_sum}"
+    puts "---"
+    puts "  "
+    say "Dealer wins!"
+    player_cash_pot = (player_cash_pot.to_i - bet.to_i)
+    puts "You lost \$#{bet.to_i}. You now have \$#{player_cash_pot}."
   elsif (dealer_sum < 21) && (player_sum < dealer_sum)
     system 'clear'
     puts "---"

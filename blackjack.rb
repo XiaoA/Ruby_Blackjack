@@ -217,7 +217,7 @@ loop do
     dealer_hand = show_hand(dealer_hand)                  
   end
 
-  binding.pry
+#  binding.pry
 
   if (dealer_sum > 21) && (player_sum < 21)
     system 'clear'
@@ -336,16 +336,21 @@ loop do
     say "value: #{dealer_sum}"
     puts "---"
     puts "  "
-    say "we both busted. Player loses"
+    say "We both busted. Player loses."
     player_cash_pot = (player_cash_pot.to_i - bet.to_i)
     puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
   end
 
-  puts "Would you like to play again? (y/n)"
-  play_again = gets.chomp.downcase
+  if player_cash_pot != 0
+    puts "Would you like to play again? (y/n)"
+    play_again = gets.chomp.downcase
+  else
+    "It looks like you're out of money, #{name}."
+    break
+  end
   break if play_again == 'n'
 end
 
 puts "Thanks for playing!"
-sleep 0.5
+sleep 7.0
 system 'clear'

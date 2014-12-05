@@ -96,17 +96,24 @@ name = gets.chomp
 
 player_cash_pot = 500  
 
+dealer_sum = 0
+player_sum = 0
+push = nil
+
 loop do
+binding.pry
+  if push == nil
+    puts "  "  
+    puts "---"
+    puts "The minimum bet is $5, and the maximum is $500."
+    puts "Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
+    puts "---"
+    puts "  "
+    puts "Place your bet. (You have \$#{player_cash_pot})!"
 
-  puts "  "  
-  puts "---"
-  puts "The minimum bet is $5, and the maximum is $500."
-  puts "Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
-  puts "---"
-  puts "  "
-  puts "Place your bet. (You have \$#{player_cash_pot})!"
-
-  bet = gets.chomp.to_i
+    bet = gets.chomp.to_i
+  else
+  end
 
   sleep 0.5
 
@@ -282,6 +289,7 @@ loop do
     puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
   elsif dealer_sum >= 17 && dealer_sum <= 21 && player_sum == dealer_sum
     system 'clear'
+    push = dealer_sum >= 17 && dealer_sum <= 21 && player_sum == dealer_sum
     puts "---"
     puts "   "
     puts "#{name}'s hand: #{player_hand}, for a value of #{player_sum}"

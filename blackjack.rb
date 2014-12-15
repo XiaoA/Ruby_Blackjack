@@ -267,13 +267,6 @@ loop do
     elsif hit_or_stand == "2"
       system "clear"
       puts "#{name} chooses to stand!"
-      # player_hand = show_hand(player_hand)
-      # player_sum = player_sum.to_i
-      # dealer_hand = show_hand(dealer_hand)
-      # dealer_sum = dealer_sum.to_i
-      # puts "Your hand: #{player_hand} has a value of #{player_sum}."
-      # puts "---"
-      # puts "Dealer's hand: #{dealer_hand} has a value of #{dealer_sum}"
       break
     end
   end
@@ -282,7 +275,8 @@ loop do
     hit = shoe.sample.pop
     dealer_hand << hit[0]
     dealer_sum = (dealer_sum + hit[1])
-    dealer_hand = show_hand(dealer_hand)                end
+    dealer_hand = show_hand(dealer_hand)                
+  end
 
   if (dealer_sum > 21) && (player_sum < 21)
     system 'clear'

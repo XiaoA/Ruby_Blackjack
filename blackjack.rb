@@ -402,9 +402,6 @@ loop do
     say "We both busted. #{name} loses."
     player_cash_pot = (player_cash_pot.to_i - bet.to_i)
     puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
-  else
-    system 'clear'
-    puts "something's wrong."
   end
 
   if push == nil
@@ -415,7 +412,7 @@ loop do
     puts "Would you like to play again? (y/n)"
     play_again = gets.chomp.downcase
   else
-    "It looks like you're out of money, #{name}."
+    puts "It looks like you're out of money, #{name}."
     break
   end
   break if play_again == 'n'

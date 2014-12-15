@@ -45,6 +45,27 @@
 # Tie (player loses)
 # - Both dealer and player bust
 
+# Win/Lose Tests
+
+# Case: Blackjack
+# Description: Either player or dealer gets 21 on first two cards.
+# player_first_card_sum = 21 && dealer_first_card_sum = 20 # player hits Blackjack 
+# (dealer_first_card_sum + dealer_second_card_sum = 21) && player_first_card_sum = 20 # dealer hits Blackjack
+
+# Case: Winning Hand (including when total of 21, but is not Blackjack)
+# Description: Both players under 21. Either player or dealer gets 21 with three or more cards; not a Blackjack.
+# player_sum = 21 && dealer_sum = 20 # player wins
+# dealer_sum = 21 && player_sum = 20 # dealer wins
+
+# Case: Bust
+# Description: Player and/or dealer get more than 21
+# player_sum = 21 && dealer_sum = 22 # dealer busts
+# dealer_sum = 21 && player_sum = 22 # player busts
+
+# Case: Push
+# Description: A tie.
+# (player_sum <= 21) && (player_sum == dealer_sum) # play again
+# (player_sum >= 21) && (player_sum == dealer_sum) # player loses.
 
 # Procedural Blackboard Game, written in Ruby
 require 'pry'
@@ -101,11 +122,11 @@ player_cash_pot = 500
 
 dealer_sum = 0
 player_sum = 0
-push = nil
+bet = 0
 
 loop do
   system 'clear'
-  if push == nil
+  if bet == 0
     puts "---"
     puts "The minimum bet is $5, and the maximum is $500."
     puts "Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
@@ -166,6 +187,7 @@ loop do
   puts "Dealer receives second card."
   sleep 1.0
   system 'clear'
+
   puts "---"
   puts "Dealer has one 'up card' (visible) , and a hidden card."
   puts "The up card is: [#{dealer_first_card}]."
@@ -177,7 +199,40 @@ loop do
   say "#{name} has #{player_sum}."
   puts "---"
 
-  while player_sum < 21
+
+  if (player_sum == 21) && (dealer_sum !=21)
+    system 'clear'
+    puts "---"
+    puts "#{name}'s hand: #{player_hand}"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand}"
+    say "value: #{dealer_sum}"
+    puts "---"
+    puts "  "
+    say "#{name} hit Blackjack!"
+    puts "  "
+    blackjack_payout = (bet.to_i / 2) + (bet.to_i)
+    player_cash_pot = player_cash_pot.to_i + blackjack_payout
+    puts "You won \$#{blackjack_payout}. You now have \$#{player_cash_pot}!"
+  elsif (player_sum > 21) && (dealer_sum < 21)
+    system 'clear'
+    puts "---"
+    puts "#{name}'s hand: #{player_hand}"
+    say "value: #{player_sum}"
+    puts "---"
+    puts "Dealer's hand: #{dealer_hand}"
+    say "value: #{dealer_sum}"
+    puts "---"
+    puts "  "
+    say "You busted. Dealer wins!"
+    puts "  "
+    player_cash_pot = player_cash_pot.to_i - bet.to_i
+    puts "You lost #{bet}. You now have \$#{player_cash_pot}."
+  end
+
+  while player_sum < 21 
+    puts " "
     puts "Do you want to Hit or Stand?"
     puts "Type '1' to Hit"
     puts "Type '2' to Stand" 
@@ -194,18 +249,31 @@ loop do
       hit = shoe.sample.pop
       player_hand << hit[0]
       player_sum = (player_sum + hit[1])
+      #player_sum = calculate_hand_sum(player_hand)
+      dealer_sum = calculate_hand_sum(dealer_hand)
       player_hand = show_hand(player_hand)
+      
       system "clear"
       puts "#{name} is receiving another card..."
       sleep 1.0
       system "clear"
-      say "#{name} has #{player_hand}, for a new total of #{player_sum}."
       puts "----"
+      puts "#{name}'s hand:  #{player_hand} for a new value of #{player_sum}."
+      say "#{name} has #{player_sum}."
+      puts "----"
+      if player_sum >= 21
+        break
+      end
     elsif hit_or_stand == "2"
-      puts "#{name} chooses to stand!"
       system "clear"
-      puts "Your hand: #{player_hand} has a value of #{player_sum}."
-      puts "---"
+      puts "#{name} chooses to stand!"
+      # player_hand = show_hand(player_hand)
+      # player_sum = player_sum.to_i
+      # dealer_hand = show_hand(dealer_hand)
+      # dealer_sum = dealer_sum.to_i
+      # puts "Your hand: #{player_hand} has a value of #{player_sum}."
+      # puts "---"
+      # puts "Dealer's hand: #{dealer_hand} has a value of #{dealer_sum}"
       break
     end
   end
@@ -214,10 +282,7 @@ loop do
     hit = shoe.sample.pop
     dealer_hand << hit[0]
     dealer_sum = (dealer_sum + hit[1])
-    dealer_hand = show_hand(dealer_hand)                  
-  end
-
-#  binding.pry
+    dealer_hand = show_hand(dealer_hand)                end
 
   if (dealer_sum > 21) && (player_sum < 21)
     system 'clear'
@@ -232,8 +297,8 @@ loop do
     say "Dealer busted. You win!"
     puts "  "
     player_cash_pot = (player_cash_pot.to_i + bet.to_i)
-    puts "You won \$#{bet}. You now have #{player_cash_pot}."
-  elsif (player_first_card_sum + player_second_card.sum == 21) && (dealer_sum != 21)
+    puts "You won \$#{bet}. You now have \$#{player_cash_pot}."
+  elsif (dealer_sum == 21) && (player_sum !=21) && (dealer_hand.count == 2)
     system 'clear'
     puts "---"
     puts "#{name}'s hand: #{player_hand}"
@@ -243,11 +308,11 @@ loop do
     say "value: #{dealer_sum}"
     puts "---"
     puts "  "
-    say "#{name} got Blackjack!"
+    say "Dealer hit Blackjack!"
     puts "  "
-    player_cash_pot = player_cash_pot.to_i + (bet.to_i * 1.5)
-    puts "You won \$#{bet.to_i * 1.5}. You now have \$#{player_cash_pot}."
-  elsif (player_sum == 21) && (player_hand.count >=3) && (dealer_sum != 21)
+    player_cash_pot = player_cash_pot.to_i - bet.to_i
+    puts "You lost #{bet}. You now have \$#{player_cash_pot}."
+  elsif (dealer_sum == 21) && (player_sum !=21) && (dealer_hand.count >= 3)
     system 'clear'
     puts "---"
     puts "#{name}'s hand: #{player_hand}"
@@ -257,10 +322,10 @@ loop do
     say "value: #{dealer_sum}"
     puts "---"
     puts "  "
-    say "#{name} wins!"
+    say "Dealer wins!"
     puts "  "
-    player_cash_pot = (player_cash_pot.to_i + bet.to_i)
-    puts "You won \$#{bet}. You now have #{player_cash_pot}."
+    player_cash_pot = player_cash_pot.to_i - bet.to_i
+    puts "You lost #{bet}. You now have \$#{player_cash_pot}."
   elsif (player_sum < 21) && (dealer_sum < player_sum)
     system 'clear'
     puts "---"
@@ -275,7 +340,7 @@ loop do
     puts "  "
     player_cash_pot = (player_cash_pot.to_i + bet.to_i)
     puts "You won \$#{bet.to_i}. You now have \$#{player_cash_pot}."
-  elsif (player_sum < 21) && (player_sum > dealer_sum)
+  elsif (player_sum == 21) && (dealer_sum !=21) && (player_hand.count >= 3)
     system 'clear'
     puts "---"
     puts "#{name}'s hand: #{player_hand}"
@@ -287,8 +352,8 @@ loop do
     puts "  "
     say "#{name} wins!"
     puts "  "
-    player_cash_pot = (player_cash_pot.to_i + bet.to_i)
-    puts "You won \$#{bet.to_i}. You now have \$#{player_cash_pot}."
+    player_cash_pot = (player_cash_pot.to_i - bet.to_i)
+    puts "You lost \$#{bet.to_i}. You now have \$#{player_cash_pot}."
   elsif (player_sum > 21) && (dealer_sum < 21)
     system 'clear'
     puts "---"
@@ -301,31 +366,6 @@ loop do
     puts "  "
     say "You busted!"
     puts "  "
-    player_cash_pot = (player_cash_pot.to_i - bet.to_i)
-    puts "You lost \$#{bet.to_i}. You now have \$#{player_cash_pot}."
-  elsif (dealer_first_card.sum + dealer_second_card.sum == 21) && (player_sum != 21)
-    system 'clear'
-    puts "---"
-    puts "#{name}'s hand: #{player_hand},"
-    say "value: #{player_sum}"
-    puts "---"
-    puts "Dealer's hand: #{dealer_hand},"
-    say "value: #{dealer_sum}"
-    puts "---"
-    say "dealer got blackjack!"
-    player_cash_pot = (player_cash_pot.to_i - bet.to_i)
-    puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
-  elsif (dealer_sum == 21) && (player_hand.count >= 3) && (player_sum != 21)
-    system 'clear'
-    puts "---"
-    puts "#{name}'s hand: #{player_hand}"
-    say "value: #{player_sum}"
-    puts "---"
-    puts "Dealer's hand: #{dealer_hand}"
-    say "value: #{dealer_sum}"
-    puts "---"
-    puts "  "
-    say "Dealer wins!"
     player_cash_pot = (player_cash_pot.to_i - bet.to_i)
     puts "You lost \$#{bet.to_i}. You now have \$#{player_cash_pot}."
   elsif (dealer_sum < 21) && (player_sum < dealer_sum)
@@ -343,7 +383,7 @@ loop do
     puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
   elsif (dealer_sum >= 17) && (dealer_sum <= 21) && (dealer_sum == player_sum) 
     system 'clear'
-    push = (dealer_sum >= 17) && (dealer_sum <= 21) && (dealer_sum == player_sum) 
+    push = player_sum
     puts "---"
     puts "#{name}'s hand: #{player_hand},"
     say "value: #{player_sum}"
@@ -352,7 +392,9 @@ loop do
     say "value: #{dealer_sum}"
     puts "---"
     puts "  "
-    say "push"
+    player_cash_pot = player_cash_pot.to_i
+    say "We both got #{push}. It's a push!"
+    say "The bet will carry over to the next hand..."
   elsif (dealer_sum > 21) && (player_sum > 21)
     system 'clear'
     puts "---"
@@ -363,9 +405,16 @@ loop do
     say "value: #{dealer_sum}"
     puts "---"
     puts "  "
-    say "We both busted. Player loses."
+    say "We both busted. #{name} loses."
     player_cash_pot = (player_cash_pot.to_i - bet.to_i)
     puts "You lost \$#{bet}. You now have \$#{player_cash_pot}."
+  else
+    system 'clear'
+    puts "something's wrong."
+  end
+
+  if push == nil
+    bet = 0
   end
 
   if player_cash_pot != 0

@@ -1,5 +1,5 @@
-# require 'rubygems'
-# require 'pry'
+ require 'rubygems'
+ require 'pry'
 
 # Object-Oriented Blackjack Game
 
@@ -175,8 +175,8 @@ class Game
     puts "---"
     puts "  "
     puts "Place your bet. (You have \$#{player_cash_pot})!"
-    @player_bet = gets.chomp.to_i
-    puts "#{player.name} bets \$#{@player_bet}..."
+    self.player_bet = gets.chomp.to_i
+    puts "#{player.name} bets \$#{self.player_bet}..."
   end
 
   def dealer_calls_no_more_bets
@@ -212,31 +212,31 @@ class Game
   end
 
   def show_player_bet
-    @player_bet
+    self.player_bet
   end
 
   def show_player_cash_pot
-    @player_cash_pot
+    self.player_cash_pot
   end
 
   def calculate_player_blackjack_cash_pot_balance
-    @player_cash_pot = show_player_cash_pot + calculate_player_blackjack_winnings_value
+    self.player_cash_pot = show_player_cash_pot + calculate_player_blackjack_winnings_value
   end
 
   def calculate_dealer_blackjack_cash_pot_balance
-    @player_cash_pot = show_player_cash_pot - show_player_bet
+    self.player_cash_pot = show_player_cash_pot - show_player_bet
   end
 
   def calculate_player_winning_cash_pot_balance
-    @player_cash_pot = show_player_cash_pot + show_player_bet
+    self.player_cash_pot = show_player_cash_pot + show_player_bet
   end
 
   def calculate_player_losing_cash_pot_balance
-    @player_cash_pot = show_player_cash_pot - show_player_bet
+    self.player_cash_pot = show_player_cash_pot - show_player_bet
   end
 
   def calculate_player_blackjack_winnings_value
-    @player_cash_pot = (show_player_bet / 2) + show_player_bet
+    self.player_cash_pot = (show_player_bet / 2) + show_player_bet
   end
 
   def player_blackjack_message
@@ -391,6 +391,7 @@ class Game
     deal_cards
     player.show_hand
     dealer.show_hand
+    binding.pry
     player_turn
     dealer_turn
     determine_winner

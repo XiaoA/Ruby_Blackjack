@@ -335,8 +335,17 @@ class Game
     puts " "    
   end
 
+  def main_game_play_sequence
+    deal_cards
+    player.show_hand
+    dealer.show_hand
+    player_turn
+    dealer_turn
+    determine_winner
+  end
+  
   def dealer_turn
-    puts "Dealer's turn."
+    puts "=> Dealer's turn."
 
     blackjack_or_bust?(dealer)
     while dealer.total < DEALER_HIT_MINIMUM
@@ -388,32 +397,17 @@ class Game
     welcome_screen
     set_player_name
     place_bet(show_player_cash_pot)
-    deal_cards
-    player.show_hand
-    dealer.show_hand
-    player_turn
-    dealer_turn
-    determine_winner
+    main_game_play_sequence
   end
 
   def keep_playing
     place_bet(show_player_cash_pot)
-    deal_cards
-    player.show_hand
-    dealer.show_hand
-    player_turn
-    dealer_turn
-    determine_winner
+    main_game_play_sequence
   end
 
   def keep_playing_if_tied
     sleep 2.0
-    deal_cards
-    player.show_hand
-    dealer.show_hand
-    player_turn
-    dealer_turn
-    determine_winner
+    main_game_play_sequence
   end
 end
 

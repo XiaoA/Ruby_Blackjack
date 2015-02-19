@@ -1,5 +1,5 @@
- require 'rubygems'
- require 'pry'
+# require 'rubygems'
+# require 'pry'
 
 # Object-Oriented Blackjack Game
 
@@ -391,7 +391,6 @@ class Game
     deal_cards
     player.show_hand
     dealer.show_hand
-    binding.pry
     player_turn
     dealer_turn
     determine_winner

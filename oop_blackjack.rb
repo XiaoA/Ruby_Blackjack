@@ -1,7 +1,7 @@
-require 'rubygems'
-require 'pry'
+# require 'rubygems'
+# require 'pry'
 
-# Object Oriented Blackjack game
+# Object-Oriented Blackjack Game
 
 class Card
   attr_accessor :suit, :face_value
@@ -141,7 +141,6 @@ class Dealer
 end
 
 class Game
-  
   attr_accessor :deck, :player, :dealer, :player_cash_pot, :player_bet
 
   BLACKJACK_AMOUNT = 21
@@ -179,7 +178,7 @@ class Game
     @player_bet = gets.chomp.to_i
     puts "#{player.name} bets \$#{@player_bet}..."
   end
-  # instance? ^
+
   def dealer_calls_no_more_bets
     puts "No more bets!"
     sleep 1.0
@@ -283,10 +282,8 @@ class Game
   def push_message
     puts "=> We both got a #{player.total}. It's a push!"
     puts "Your bet will carry over to the next round..."
-    #    keep_playing_if_tied
   end
 
-  ## Start
   def blackjack_or_bust?(player_or_dealer)
     if player_or_dealer.total == BLACKJACK_AMOUNT
       if player_or_dealer.is_a?(Dealer)
@@ -324,9 +321,7 @@ class Game
         break
       end
 
-      
-
-      #hit
+      # Hit
       new_card = deck.deal_card
       puts " "
       puts "Dealing card to #{player.name}: #{new_card}"
@@ -368,8 +363,6 @@ class Game
     end
     play_again?
   end
-
-  # End
 
   def play_again?
     puts ""

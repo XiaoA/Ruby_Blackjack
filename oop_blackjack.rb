@@ -114,11 +114,6 @@ class Player
     @name = name
     @cards = []
   end
-
-  def show_flop
-    show_hand
-  end
-
 end
 
 class Dealer
@@ -131,7 +126,7 @@ class Dealer
     @cards = []
   end
 
-  def show_hand
+  def show_upcard_only
     puts "---- Dealer's Hand ----"
     puts "=> The first card is hidden"
     puts "=> The second card is #{cards[1]}"
@@ -204,12 +199,13 @@ class Game
     dealer.add_card(deck.deal_card)
     player.add_card(deck.deal_card)
     dealer.add_card(deck.deal_card)
+    card_deal_description
   end
 
-  def show_hand
-    player.show_hand
-    dealer.show_hand
-  end
+  # def show_hand
+  #   player.show_hand
+  #   dealer.show_hand
+  # end
 
   def show_player_bet
     self.player_bet
@@ -240,18 +236,21 @@ class Game
   end
 
   def player_blackjack_message
+    show_all_cards_at_end
     puts "=> Congratulations, #{player.name}! You hit Blackjack!"
     puts "You bet \$#{show_player_bet}."
     puts "You now have \$#{calculate_player_blackjack_cash_pot_balance}."
   end
 
   def dealer_blackjack_message
+    show_all_cards_at_end    
     puts "=> Sorry, Dealer hit blackjack."
     puts "You bet \$#{show_player_bet}." 
     puts "You now have \$#{calculate_dealer_blackjack_cash_pot_balance}."
   end
 
   def player_high_score_message
+    show_all_cards_at_end
     puts "=> Congratulations, #{player.name}! You won!"
     puts " " 
     puts "You bet \$#{show_player_bet}." 
@@ -259,6 +258,7 @@ class Game
   end
 
   def dealer_high_score_message
+    show_all_cards_at_end
     puts "=> Sorry, Dealer wins."
     puts " " 
     puts "You bet \$#{show_player_bet}." 
@@ -266,6 +266,7 @@ class Game
   end
 
   def player_busted_message
+    show_all_cards_at_end
     puts "=> Sorry, #{player.name}, you busted."
     puts " " 
     puts "You bet \$#{show_player_bet}." 
@@ -273,6 +274,7 @@ class Game
   end
 
   def dealer_busted_message
+    show_all_cards_at_end
     puts "=> Dealer busted. #{player.name} wins!"
     puts " "
     puts "You bet \$#{show_player_bet}." 
@@ -280,6 +282,7 @@ class Game
   end
 
   def push_message
+    show_all_cards_at_end
     puts "=> We both got a #{player.total}. It's a push!"
     puts "Your bet will carry over to the next round..."
   end
@@ -335,10 +338,17 @@ class Game
     puts " "    
   end
 
+  def show_all_cards_at_end
+    system 'clear'
+    puts "Let's put all our cards on the table..."
+    player.show_hand
+    dealer.show_hand
+  end
+  
   def main_game_play_sequence
     deal_cards
     player.show_hand
-    dealer.show_hand
+    dealer.show_upcard_only
     player_turn
     dealer_turn
     determine_winner

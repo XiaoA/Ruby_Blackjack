@@ -381,20 +381,25 @@ class Game
   def play_again?
     puts ""
     puts "Would you like to play again? 1) yes 2) no"
-    if gets.chomp == '1'
-      puts "Starting new game..."
-      sleep 1.0
-      system 'clear'
-      deck = Deck.new
-      player.cards = []
-      dealer.cards = []
-      show_player_cash_pot
-      keep_playing
-    else
-      puts "Thanks for playing!"
-      sleep 4.0
-      system 'clear'
-      exit
+    loop do
+      continue_game = gets.chomp
+      if continue_game == '1'
+        puts "Starting new game..."
+        sleep 1.0
+        system 'clear'
+        deck = Deck.new
+        player.cards = []
+        dealer.cards = []
+        show_player_cash_pot
+        keep_playing
+      elsif continue_game == '2'
+        puts "Thanks for playing!"
+        sleep 4.0
+        system 'clear'
+        exit
+      else
+        puts "Error: you must enter 1 or 2"
+      end
     end
   end
 

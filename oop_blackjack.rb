@@ -96,15 +96,6 @@ module Hand
   end
 end
 
-# class Bankroll
-#   attr_accessor :player_cash_pot, :player_bet
-
-#   def initialize
-#     @player_cash_pot = player_cash_pot
-#     @player_bet = player_bet
-#   end
-# end
-
 class Player
   include Hand
 

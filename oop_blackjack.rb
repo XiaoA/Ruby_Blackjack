@@ -202,11 +202,6 @@ class Game
     card_deal_description
   end
 
-  # def show_hand
-  #   player.show_hand
-  #   dealer.show_hand
-  # end
-
   def show_player_bet
     self.player_bet
   end

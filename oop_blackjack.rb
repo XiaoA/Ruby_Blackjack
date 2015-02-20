@@ -96,23 +96,25 @@ module Hand
   end
 end
 
-class Bankroll
-  attr_accessor :player_cash_pot, :player_bet
-  
-  def initialize
-    @player_cash_pot = player_cash_pot
-    @player_bet = player_bet
-  end
-end
+# class Bankroll
+#   attr_accessor :player_cash_pot, :player_bet
+
+#   def initialize
+#     @player_cash_pot = player_cash_pot
+#     @player_bet = player_bet
+#   end
+# end
 
 class Player
   include Hand
 
-  attr_accessor :name, :cards
+  attr_accessor :name, :cards, :bet, :cash_pot
 
   def initialize
     @name = name
     @cards = []
+    @bet = bet
+    @cash_pot = cash_pot
   end
 end
 
@@ -136,7 +138,7 @@ class Dealer
 end
 
 class Game
-  attr_accessor :deck, :player, :dealer, :player_cash_pot, :player_bet
+  attr_accessor :deck, :player, :dealer, :cash_pot, :bet
 
   BLACKJACK_AMOUNT = 21
   DEALER_HIT_MINIMUM = 17
@@ -145,8 +147,8 @@ class Game
     @deck = Deck.new
     @player = Player.new
     @dealer = Dealer.new
-    @player_cash_pot = 500
-    @player_bet = 0
+    @cash_pot = 500
+    @bet = 0
   end
 
   def welcome_screen
@@ -163,15 +165,24 @@ class Game
     player.name = gets.chomp
   end
 
-  def place_bet(show_player_cash_pot)
+  def show_bet
+    self.bet
+  end
+
+  def show_cash_pot
+    self.cash_pot
+  end
+  
+
+  def place_bet(show_cash_pot)
     puts "---"
     puts "The minimum bet is $5, and the maximum is $500."
     puts "Please choose a number between 5 and 500 (Numbers only, no '$' or decimals, please...)"
     puts "---"
     puts "  "
-    puts "Place your bet. (You have \$#{player_cash_pot})!"
-    self.player_bet = gets.chomp.to_i
-    puts "#{player.name} bets \$#{self.player_bet}..."
+    puts "Place your bet. (You have \$#{cash_pot})!"
+    self.bet = gets.chomp.to_i
+    puts "#{player.name} bets \$#{self.bet}..."
   end
 
   def dealer_calls_no_more_bets
@@ -201,54 +212,45 @@ class Game
     dealer.add_card(deck.deal_card)
     card_deal_description
   end
-
-  def show_player_bet
-    self.player_bet
-  end
-
-  def show_player_cash_pot
-    self.player_cash_pot
-  end
-
+  
   def calculate_player_blackjack_cash_pot_balance
-    self.player_cash_pot = show_player_cash_pot + calculate_player_blackjack_winnings_value
+    self.cash_pot = show_cash_pot + calculate_player_blackjack_winnings_value
   end
 
   def calculate_dealer_blackjack_cash_pot_balance
-    self.player_cash_pot = show_player_cash_pot - show_player_bet
+    self.cash_pot = show_cash_pot - show_bet
   end
 
   def calculate_player_winning_cash_pot_balance
-    self.player_cash_pot = show_player_cash_pot + show_player_bet
+    self.cash_pot = show_cash_pot + show_bet
   end
 
   def calculate_player_losing_cash_pot_balance
-    self.player_cash_pot = show_player_cash_pot - show_player_bet
+    self.cash_pot = show_cash_pot - show_bet
   end
 
   def calculate_player_blackjack_winnings_value
-    self.player_cash_pot = (show_player_bet / 2) + show_player_bet
+    self.cash_pot = (show_bet / 2) + show_bet
   end
 
   def player_blackjack_message
     show_all_cards_at_end
     puts "=> Congratulations, #{player.name}! You hit Blackjack!"
-    puts "You bet \$#{show_player_bet}."
+    puts "You bet \$#{show_bet}."
     puts "You now have \$#{calculate_player_blackjack_cash_pot_balance}."
   end
 
   def dealer_blackjack_message
     show_all_cards_at_end    
     puts "=> Sorry, Dealer hit blackjack."
-    puts "You bet \$#{show_player_bet}." 
+    puts "You bet \$#{show_bet}." 
     puts "You now have \$#{calculate_dealer_blackjack_cash_pot_balance}."
   end
 
-  def player_high_score_message
-    show_all_cards_at_end
+  def player_high_score_message   show_all_cards_at_end
     puts "=> Congratulations, #{player.name}! You won!"
     puts " " 
-    puts "You bet \$#{show_player_bet}." 
+    puts "You bet \$#{show_bet}." 
     puts "You now have \$#{calculate_player_winning_cash_pot_balance}."
   end
 
@@ -256,7 +258,7 @@ class Game
     show_all_cards_at_end
     puts "=> Sorry, Dealer wins."
     puts " " 
-    puts "You bet \$#{show_player_bet}." 
+    puts "You bet \$#{show_bet}." 
     puts "You now have \$#{calculate_player_losing_cash_pot_balance}."
   end
 
@@ -264,7 +266,7 @@ class Game
     show_all_cards_at_end
     puts "=> Sorry, #{player.name}, you busted."
     puts " " 
-    puts "You bet \$#{show_player_bet}." 
+    puts "You bet \$#{show_bet}." 
     puts "You now have \$#{calculate_player_losing_cash_pot_balance}."
   end
 
@@ -272,7 +274,7 @@ class Game
     show_all_cards_at_end
     puts "=> Dealer busted. #{player.name} wins!"
     puts " "
-    puts "You bet \$#{show_player_bet}." 
+    puts "You bet \$#{show_bet}." 
     puts "You now have \$#{calculate_player_winning_cash_pot_balance}."
   end
 
@@ -335,7 +337,6 @@ class Game
 
   def show_all_cards_at_end
     system 'clear'
-    puts "Let's put all our cards on the table..."
     player.show_hand
     dealer.show_hand
   end
@@ -390,7 +391,7 @@ class Game
         deck = Deck.new
         player.cards = []
         dealer.cards = []
-        show_player_cash_pot
+        show_cash_pot
         keep_playing
       elsif continue_game == '2'
         puts "Thanks for playing!"
@@ -406,12 +407,12 @@ class Game
   def start
     welcome_screen
     set_player_name
-    place_bet(show_player_cash_pot)
+    place_bet(show_cash_pot)
     main_game_play_sequence
   end
 
   def keep_playing
-    place_bet(show_player_cash_pot)
+    place_bet(show_cash_pot)
     main_game_play_sequence
   end
 

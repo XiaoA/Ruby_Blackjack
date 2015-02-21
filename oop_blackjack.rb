@@ -238,7 +238,8 @@ class Game
     puts "You now have \$#{calculate_dealer_blackjack_cash_pot_balance}."
   end
 
-  def player_high_score_message   show_all_cards_at_end
+  def player_high_score_message   
+    show_all_cards_at_end
     puts "=> Congratulations, #{player.name}! You won!"
     puts " " 
     puts "You bet \$#{show_bet}." 
